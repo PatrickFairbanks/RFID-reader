@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <style name="textDisp" parent="Base.TextAppearance.AppCompat.Medium">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingTop">20dip</item>
+        <item name="android:paddingBottom">15dip</item>
+        <item name="android:gravity">center</item>
+    </style>
+    <style name="refresh_button" parent="Base.TextAppearance.AppCompat.Medium">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_marginTop">10dip</item>
+
+    </style>
+</resources>
