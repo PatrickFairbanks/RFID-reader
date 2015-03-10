@@ -1,0 +1,387 @@
+; ModuleID = 'C:\Users\Andrew\Documents\GitHub\RFID-reader\XInC2_uC_firmware\main.c'
+target datalayout = "e-p:16:16:16-i1:16:16-i8:16:16-i16:16:16-i32:16:16-a0:16:16-s0:16:16-n16"
+target triple = "XInC2"
+
+@SCUreg = constant i16 0, align 1
+@SCUpc = constant i16 1, align 1
+@SCUcc = constant i16 2, align 1
+@SCUtime = constant i16 3, align 1
+@SCUpntr = constant i16 3, align 1
+@SCUbkpt = constant i16 4, align 1
+@SCUstop = constant i16 4, align 1
+@SCUwait = constant i16 5, align 1
+@SCUiopageWR = constant i16 5, align 1
+@SCUrsrc = constant i16 6, align 1
+@SCUup = constant i16 6, align 1
+@SCUiopageRD = constant i16 7, align 1
+@SCUdown = constant i16 7, align 1
+@LFSR0cfg = constant i16 8, align 1
+@LFSR0tapcfg = constant i16 9, align 1
+@LFSR0reg = constant i16 10, align 1
+@LFSR0data = constant i16 11, align 1
+@LFSR1cfg = constant i16 12, align 1
+@LFSR1tapcfg = constant i16 13, align 1
+@LFSR1reg = constant i16 14, align 1
+@LFSR1data = constant i16 15, align 1
+@VPUcfg0 = constant i16 16, align 1
+@VPUcfg1 = constant i16 17, align 1
+@VPUopAba = constant i16 18, align 1
+@VPUopBba = constant i16 19, align 1
+@VPUopadrmsk = constant i16 20, align 1
+@VPUopA = constant i16 21, align 1
+@VPUopB = constant i16 22, align 1
+@VPUrsba = constant i16 23, align 1
+@VPUrsadrsmk = constant i16 24, align 1
+@VPUrslsw = constant i16 25, align 1
+@VPUrsmsw = constant i16 26, align 1
+@VPUrsext = constant i16 27, align 1
+@VPUfilterLength = constant i16 28, align 1
+@SPI0rx = constant i16 52, align 1
+@SPI0tx = constant i16 52, align 1
+@SPI0cfg = constant i16 53, align 1
+@SPI1rx = constant i16 54, align 1
+@SPI1tx = constant i16 54, align 1
+@SPI1cfg = constant i16 55, align 1
+@SFUrev = constant i16 56, align 1
+@SFUpack = constant i16 57, align 1
+@SFUpop = constant i16 58, align 1
+@SFUls1 = constant i16 59, align 1
+@TMRAcfg = constant i16 62, align 1
+@TMRAcount = constant i16 63, align 1
+@TMRACCR0 = constant i16 64, align 1
+@TMRACCM0cfg = constant i16 65, align 1
+@TMRACCR1 = constant i16 66, align 1
+@TMRACCM1cfg = constant i16 67, align 1
+@TMRACCR2 = constant i16 68, align 1
+@TMRACCM2cfg = constant i16 69, align 1
+@TMRACCR3 = constant i16 70, align 1
+@TMRACCM3cfg = constant i16 71, align 1
+@GPAin = constant i16 32, align 1
+@GPAout = constant i16 32, align 1
+@GPAcfg = constant i16 33, align 1
+@GPBin = constant i16 34, align 1
+@GPBout = constant i16 34, align 1
+@GPBcfg = constant i16 35, align 1
+@GPCin = constant i16 36, align 1
+@GPCout = constant i16 36, align 1
+@GPCcfg = constant i16 37, align 1
+@GPDin = constant i16 38, align 1
+@GPDout = constant i16 38, align 1
+@GPDcfg = constant i16 39, align 1
+@GPEin = constant i16 40, align 1
+@GPEout = constant i16 40, align 1
+@GPEcfg = constant i16 41, align 1
+@GPFin = constant i16 42, align 1
+@GPFout = constant i16 42, align 1
+@GPFcfg = constant i16 43, align 1
+@GPGin = constant i16 44, align 1
+@GPGout = constant i16 44, align 1
+@GPGcfg = constant i16 45, align 1
+@GPHin = constant i16 46, align 1
+@GPHout = constant i16 46, align 1
+@GPHcfg = constant i16 47, align 1
+@GPIin = constant i16 48, align 1
+@GPIout = constant i16 48, align 1
+@GPIcfg = constant i16 49, align 1
+@GPJin = constant i16 50, align 1
+@GPJout = constant i16 50, align 1
+@GPJcfg = constant i16 51, align 1
+@TMRBcfg = constant i16 72, align 1
+@TMRBcount = constant i16 73, align 1
+@TMRBCCR0 = constant i16 74, align 1
+@TMRBCCM0cfg = constant i16 75, align 1
+@TMRBCCR1 = constant i16 76, align 1
+@TMRBCCM1cfg = constant i16 77, align 1
+@BBU0cfg0 = constant i16 88, align 1
+@BBU0cfg1 = constant i16 89, align 1
+@BBU0tx = constant i16 90, align 1
+@BBU0rx = constant i16 90, align 1
+@BBU0brg = constant i16 91, align 1
+@BBU0time = constant i16 92, align 1
+@BBU0rx4 = constant i16 93, align 1
+@BBU0rx6 = constant i16 94, align 1
+@BBU0start = constant i16 95, align 1
+@BBU1cfg0 = constant i16 96, align 1
+@BBU1cfg1 = constant i16 97, align 1
+@BBU1tx = constant i16 98, align 1
+@BBU1rx = constant i16 98, align 1
+@BBU1brg = constant i16 99, align 1
+@BBU1time = constant i16 100, align 1
+@BBU1flow = constant i16 101, align 1
+@BBU1rx4 = constant i16 101, align 1
+@BBU1start = constant i16 103, align 1
+@DASIconfig0 = constant i16 104, align 1
+@DASIconfig1 = constant i16 105, align 1
+@DASIconfig2 = constant i16 106, align 1
+@DASIstatus0 = constant i16 107, align 1
+@DASIstatus1 = constant i16 108, align 1
+@DASIstatus2 = constant i16 109, align 1
+@DASIrx0 = constant i16 107, align 1
+@DASIrx1 = constant i16 108, align 1
+@DASIrx2 = constant i16 109, align 1
+@DASItx0 = constant i16 107, align 1
+@DASItx1 = constant i16 108, align 1
+@DASItx2 = constant i16 109, align 1
+@DASIcount0 = constant i16 110, align 1
+@DASIcount1 = constant i16 111, align 1
+@SCXioCfgP = constant i16 112, align 1
+@SCXioCfgD = constant i16 113, align 1
+@SCXclkCfg = constant i16 114, align 1
+@SCXaltCfg = constant i16 115, align 1
+@SCXPLLCfg0 = constant i16 116, align 1
+@SCXPLLCfg1 = constant i16 117, align 1
+@SCXmemcol = constant i16 118, align 1
+@SCXcount = constant i16 119, align 1
+@SMUcfg0 = constant i16 120, align 1
+@SMUcfg1 = constant i16 121, align 1
+@ADCcfg0 = constant i16 125, align 1
+@ADCcfg1 = constant i16 126, align 1
+@ADCdata = constant i16 127, align 1
+@Quant0cfg = constant i16 72, align 1
+@Quant0pred = constant i16 73, align 1
+@Quant0dec = constant i16 73, align 1
+@Quant0step = constant i16 74, align 1
+@Quant0delta = constant i16 74, align 1
+@Quant0samp = constant i16 75, align 1
+@Quant1cfg = constant i16 76, align 1
+@Quant1pred = constant i16 77, align 1
+@Quant1dec = constant i16 77, align 1
+@Quant1step = constant i16 78, align 1
+@Quant1delta = constant i16 78, align 1
+@Quant1samp = constant i16 79, align 1
+@Quant2cfg = constant i16 80, align 1
+@Quant2pred = constant i16 81, align 1
+@Quant2dec = constant i16 81, align 1
+@Quant2step = constant i16 82, align 1
+@Quant2delta = constant i16 82, align 1
+@Quant2samp = constant i16 83, align 1
+@Quant3cfg = constant i16 84, align 1
+@Quant3pred = constant i16 85, align 1
+@Quant3dec = constant i16 85, align 1
+@Quant3step = constant i16 86, align 1
+@Quant3delta = constant i16 86, align 1
+@Quant3samp = constant i16 87, align 1
+@InvQuant0cfg = constant i16 88, align 1
+@InvQuant0delta = constant i16 89, align 1
+@InvQuant0vpdiff = constant i16 89, align 1
+@InvQuant0step = constant i16 90, align 1
+@InvQuant1cfg = constant i16 92, align 1
+@InvQuant1delta = constant i16 93, align 1
+@InvQuant1vpdiff = constant i16 93, align 1
+@InvQuant1step = constant i16 94, align 1
+@InvQuant2cfg = constant i16 96, align 1
+@InvQuant2delta = constant i16 97, align 1
+@InvQuant2vpdiff = constant i16 97, align 1
+@InvQuant2step = constant i16 98, align 1
+@InvQuant3cfg = constant i16 100, align 1
+@InvQuant3delta = constant i16 101, align 1
+@InvQuant3vpdiff = constant i16 101, align 1
+@InvQuant3step = constant i16 102, align 1
+@Accum0cfg = constant i16 104, align 1
+@Accum0high = constant i16 105, align 1
+@Accum0low = constant i16 106, align 1
+@Accum0addsubhigh = constant i16 107, align 1
+@Accum0addlow = constant i16 108, align 1
+@Accum0sublow = constant i16 109, align 1
+@Accum1cfg = constant i16 110, align 1
+@Accum1high = constant i16 111, align 1
+@Accum1low = constant i16 112, align 1
+@Accum1addsubhigh = constant i16 113, align 1
+@Accum1addlow = constant i16 114, align 1
+@Accum1sublow = constant i16 115, align 1
+@kNumSlicesPerMs = constant i16 16, align 1
+@kCrysF = constant i16 0, align 1
+@kSystemF = constant i16 3, align 1
+@llvm.used = appending global [3 x i8*] [i8* bitcast (i16* (i16*, i16, i16)* @memset to i8*), i8* bitcast (i16* (i16*, i16*, i16)* @memcpy to i8*), i8* bitcast (i16* (i16*, i16*, i16)* @memmove to i8*)], section "llvm.metadata"
+
+define internal i16* @memset(i16* %s, i16 %c, i16 %n) nounwind inlinehint {
+  %1 = icmp eq i16 %n, 0
+  br i1 %1, label %._crit_edge, label %.lr.ph
+
+.lr.ph:                                           ; preds = %0, %.lr.ph
+  %i.01 = phi i16 [ %3, %.lr.ph ], [ 0, %0 ]
+  %2 = getelementptr inbounds i16* %s, i16 %i.01
+  store i16 %c, i16* %2, align 1, !tbaa !0
+  %3 = add i16 %i.01, 1
+  %exitcond = icmp eq i16 %3, %n
+  br i1 %exitcond, label %._crit_edge, label %.lr.ph
+
+._crit_edge:                                      ; preds = %.lr.ph, %0
+  ret i16* %s
+}
+
+define internal i16* @memcpy(i16* %dest, i16* nocapture %src, i16 %n) nounwind inlinehint {
+  %1 = icmp eq i16 %n, 0
+  br i1 %1, label %._crit_edge, label %.lr.ph
+
+.lr.ph:                                           ; preds = %0, %.lr.ph
+  %i.01 = phi i16 [ %5, %.lr.ph ], [ 0, %0 ]
+  %2 = getelementptr inbounds i16* %src, i16 %i.01
+  %3 = load i16* %2, align 1, !tbaa !0
+  %4 = getelementptr inbounds i16* %dest, i16 %i.01
+  store i16 %3, i16* %4, align 1, !tbaa !0
+  %5 = add i16 %i.01, 1
+  %exitcond = icmp eq i16 %5, %n
+  br i1 %exitcond, label %._crit_edge, label %.lr.ph
+
+._crit_edge:                                      ; preds = %.lr.ph, %0
+  ret i16* %dest
+}
+
+define internal i16* @memmove(i16* %dest, i16* nocapture %src, i16 %n) nounwind inlinehint {
+  %1 = icmp eq i16 %n, 0
+  br i1 %1, label %memcpy.exit, label %.lr.ph.i
+
+.lr.ph.i:                                         ; preds = %0, %.lr.ph.i
+  %i.01.i = phi i16 [ %5, %.lr.ph.i ], [ 0, %0 ]
+  %2 = getelementptr inbounds i16* %src, i16 %i.01.i
+  %3 = load i16* %2, align 1, !tbaa !0
+  %4 = getelementptr inbounds i16* %dest, i16 %i.01.i
+  store i16 %3, i16* %4, align 1, !tbaa !0
+  %5 = add i16 %i.01.i, 1
+  %exitcond.i = icmp eq i16 %5, %n
+  br i1 %exitcond.i, label %memcpy.exit, label %.lr.ph.i
+
+memcpy.exit:                                      ; preds = %.lr.ph.i, %0
+  ret i16* %dest
+}
+
+define void @init() nounwind readnone {
+  ret void
+}
+
+define i16 @main() nounwind {
+  %1 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 32) nounwind
+  %2 = and i16 %1, -2
+  tail call void @llvm.XInC2.outp(i16 zeroext %2, i16 zeroext 32) nounwind
+  %3 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
+  %4 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
+  %5 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 32) nounwind
+  %6 = or i16 %5, 1
+  tail call void @llvm.XInC2.outp(i16 zeroext %6, i16 zeroext 32) nounwind
+  %7 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
+  %8 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
+  %9 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 32) nounwind
+  %10 = and i16 %9, -2
+  tail call void @llvm.XInC2.outp(i16 zeroext %10, i16 zeroext 32) nounwind
+  %11 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
+  %12 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
+  %13 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 32) nounwind
+  %14 = and i16 %13, -2
+  tail call void @llvm.XInC2.outp(i16 zeroext %14, i16 zeroext 32) nounwind
+  %15 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
+  %16 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
+  %17 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 32) nounwind
+  %18 = and i16 %17, -2
+  tail call void @llvm.XInC2.outp(i16 zeroext %18, i16 zeroext 32) nounwind
+  %19 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
+  %20 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
+  %21 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 32) nounwind
+  %22 = and i16 %21, -2
+  tail call void @llvm.XInC2.outp(i16 zeroext %22, i16 zeroext 32) nounwind
+  %23 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
+  %24 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
+  %25 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 32) nounwind
+  %26 = or i16 %25, 1
+  tail call void @llvm.XInC2.outp(i16 zeroext %26, i16 zeroext 32) nounwind
+  %27 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
+  %28 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
+  %29 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 32) nounwind
+  %30 = or i16 %29, 1
+  tail call void @llvm.XInC2.outp(i16 zeroext %30, i16 zeroext 32) nounwind
+  %31 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
+  %32 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
+  %33 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 32) nounwind
+  %34 = and i16 %33, -2
+  tail call void @llvm.XInC2.outp(i16 zeroext %34, i16 zeroext 32) nounwind
+  %35 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
+  %36 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
+  %37 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 32) nounwind
+  %38 = or i16 %37, 1
+  tail call void @llvm.XInC2.outp(i16 zeroext %38, i16 zeroext 32) nounwind
+  %39 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
+  %40 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
+  br label %41
+
+; <label>:41                                      ; preds = %41, %0
+  %42 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 38) nounwind
+  %.lobit.i.i = and i16 %42, 32
+  %43 = icmp eq i16 %.lobit.i.i, 0
+  br i1 %43, label %.preheader.i, label %41
+
+.preheader.i:                                     ; preds = %41
+  %44 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
+  %45 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
+  %46 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 38) nounwind
+  %47 = lshr i16 %46, 5
+  %48 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
+  %49 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
+  %50 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 38) nounwind
+  %51 = lshr i16 %50, 5
+  %.lobit.i2.1.i = shl nuw nsw i16 %51, 1
+  %52 = and i16 %.lobit.i2.1.i, 2
+  %53 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
+  %54 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
+  %55 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 38) nounwind
+  %56 = lshr i16 %55, 5
+  %.lobit.i2.2.i = shl nuw nsw i16 %56, 2
+  %57 = and i16 %.lobit.i2.2.i, 4
+  %58 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
+  %59 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
+  %60 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 38) nounwind
+  %61 = lshr i16 %60, 5
+  %.lobit.i2.3.i = shl nuw nsw i16 %61, 3
+  %62 = and i16 %.lobit.i2.3.i, 8
+  %63 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
+  %64 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
+  %65 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 38) nounwind
+  %66 = lshr i16 %65, 5
+  %.lobit.i2.4.i = shl nuw nsw i16 %66, 4
+  %67 = and i16 %.lobit.i2.4.i, 16
+  %68 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
+  %69 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
+  %70 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 38) nounwind
+  %.lobit.i2.5.i = and i16 %70, 32
+  %71 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
+  %72 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
+  %73 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 38) nounwind
+  %74 = lshr i16 %73, 5
+  %.lobit.i2.6.i = shl i16 %74, 6
+  %75 = and i16 %.lobit.i2.6.i, 64
+  %76 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
+  %77 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
+  %78 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 38) nounwind
+  %79 = lshr i16 %78, 5
+  %.lobit.i2.7.i = shl i16 %79, 7
+  %80 = and i16 %.lobit.i2.7.i, 128
+  %81 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
+  %82 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
+  br label %83
+
+; <label>:83                                      ; preds = %83, %.preheader.i
+  %84 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 38) nounwind
+  %.lobit.i1.i = and i16 %84, 32
+  %85 = icmp eq i16 %.lobit.i1.i, 0
+  br i1 %85, label %83, label %uart_read_byte.exit
+
+uart_read_byte.exit:                              ; preds = %83
+  %.lobit.i2.i = and i16 %47, 1
+  %86 = or i16 %52, %.lobit.i2.i
+  %87 = or i16 %86, %57
+  %88 = or i16 %87, %62
+  %89 = or i16 %88, %67
+  %90 = or i16 %89, %.lobit.i2.5.i
+  %91 = or i16 %90, %75
+  %92 = add i16 %80, %91
+  tail call void asm sideeffect "//Asserting number to R1 for XPD_EchoUnsignedDec\0A\09jsr\09r6, XPD_EchoUnsignedDec", "{R1},~{R1},~{R6}"(i16 %92) nounwind, !srcloc !3
+  ret i16 0
+}
+
+declare i16 @llvm.XInC2.inp(i16) nounwind
+
+declare void @llvm.XInC2.outp(i16, i16) nounwind
+
+!0 = metadata !{metadata !"short", metadata !1}
+!1 = metadata !{metadata !"omnipotent char", metadata !2}
+!2 = metadata !{metadata !"Simple C/C++ TBAA"}
+!3 = metadata !{i32 -2147436932, i32 -2147436898} 

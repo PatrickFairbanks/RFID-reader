@@ -6,18 +6,17 @@
 //--------------------------------------------------------------------------------------
 #include <IOConfig.h>
 #include <Structs.h>
+#include <XPD.h>
 
 #include "time_funcs.h"
 #include "struct_aliases.h"
 #include "UART.h"
 
-static const UART_Pin_Pair btPair;
+static const UART_Pin_Pair btPair = { LED4, LED5, 0 };
 
 void init()
 {
-	btPair.rx = LED4;
-	btPair.tx = LED5;
-	btPair.timeout = 0;
+
 }
 
 int main(void)
@@ -27,7 +26,7 @@ int main(void)
 	uart_write_byte('a', &btPair);
 	
 	uint16_t in = uart_read_byte(&btPair);
-	xpd_echo(in);
+	xpd_echo_int(in, XPD_Flag_UnsignedDecimal);
 	
 	return 0;
 }

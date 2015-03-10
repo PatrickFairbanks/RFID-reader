@@ -74,11 +74,35 @@ C:/Program Files (x86)/SXC/include/sxc-lib/SystemClock.h
 Timer.h
 C:/Program Files (x86)/SXC/include/sxc-lib/Timer.h
 
+C:/Program Files (x86)/SXC/include/sxc-lib/Thread.h
+Semaphore.h
+C:/Program Files (x86)/SXC/include/sxc-lib/Semaphore.h
+SFU.h
+C:/Program Files (x86)/SXC/include/sxc-lib/SFU.h
+pthread.h
+-
+
 C:/Program Files (x86)/SXC/include/sxc-lib/Timer.h
 SXC.h
 C:/Program Files (x86)/SXC/include/sxc-lib/SXC.h
 register_consts.h
 C:/Program Files (x86)/SXC/include/sxc-lib/register_consts.h
+
+C:/Program Files (x86)/SXC/include/sxc-lib/XPD.h
+SXC.h
+C:/Program Files (x86)/SXC/include/sxc-lib/SXC.h
+register_consts.h
+C:/Program Files (x86)/SXC/include/sxc-lib/register_consts.h
+stdio.h
+-
+unistd.h
+-
+fcntl.h
+-
+errno.h
+-
+Thread.h
+C:/Program Files (x86)/SXC/include/sxc-lib/Thread.h
 
 C:/Program Files (x86)/SXC/include/sxc-lib/__Macros.h
 
@@ -108,6 +132,10 @@ C:/Program Files (x86)/SXC/include/sxc-newlib/_ansi.h
 
 C:/Program Files (x86)/SXC/include/sxc-newlib/errno.h
 sys/errno.h
+-
+
+C:/Program Files (x86)/SXC/include/sxc-newlib/fcntl.h
+sys/fcntl.h
 -
 
 C:/Program Files (x86)/SXC/include/sxc-newlib/getopt.h
@@ -156,12 +184,28 @@ C:/Program Files (x86)/SXC/include/sxc-newlib/_ansi.h
 sys/signal.h
 -
 
+C:/Program Files (x86)/SXC/include/sxc-newlib/stdarg.h
+
 C:/Program Files (x86)/SXC/include/sxc-newlib/stddef.h
 
 C:/Program Files (x86)/SXC/include/sxc-newlib/stdint.h
 _ansi.h
 -
 limits.h
+-
+
+C:/Program Files (x86)/SXC/include/sxc-newlib/stdio.h
+_ansi.h
+C:/Program Files (x86)/SXC/include/sxc-newlib/_ansi.h
+stddef.h
+-
+stdarg.h
+-
+sys/reent.h
+-
+sys/types.h
+-
+sys/stdio.h
 -
 
 C:/Program Files (x86)/SXC/include/sxc-newlib/string.h
@@ -176,6 +220,16 @@ sys/features.h
 stddef.h
 -
 sys/string.h
+-
+
+C:/Program Files (x86)/SXC/include/sxc-newlib/sys/_default_fcntl.h
+_ansi.h
+-
+sys/types.h
+-
+sys/stat.h
+-
+sys/time.h
 -
 
 C:/Program Files (x86)/SXC/include/sxc-newlib/sys/_types.h
@@ -200,6 +254,10 @@ C:/Program Files (x86)/SXC/include/sxc-newlib/sys/custom_file.h
 
 C:/Program Files (x86)/SXC/include/sxc-newlib/sys/errno.h
 sys/reent.h
+-
+
+C:/Program Files (x86)/SXC/include/sxc-newlib/sys/fcntl.h
+sys/_default_fcntl.h
 -
 
 C:/Program Files (x86)/SXC/include/sxc-newlib/sys/features.h
@@ -234,7 +292,31 @@ cygwin/signal.h
 signal.h
 -
 
+C:/Program Files (x86)/SXC/include/sxc-newlib/sys/stat.h
+_ansi.h
+-
+time.h
+-
+sys/types.h
+-
+cygwin/stat.h
+-
+
+C:/Program Files (x86)/SXC/include/sxc-newlib/sys/stdio.h
+sys/lock.h
+-
+sys/reent.h
+-
+
 C:/Program Files (x86)/SXC/include/sxc-newlib/sys/string.h
+
+C:/Program Files (x86)/SXC/include/sxc-newlib/sys/time.h
+_ansi.h
+-
+sys/types.h
+-
+cygwin/sys_time.h
+-
 
 C:/Program Files (x86)/SXC/include/sxc-newlib/sys/types.h
 _ansi.h
@@ -294,6 +376,8 @@ C:/Users/Andrew/Documents/GitHub/RFID-reader/XInC2_uC_firmware/main.c
 IOConfig.h
 -
 Structs.h
+-
+XPD.h
 -
 time_funcs.h
 C:/Users/Andrew/Documents/GitHub/RFID-reader/XInC2_uC_firmware/time_funcs.h

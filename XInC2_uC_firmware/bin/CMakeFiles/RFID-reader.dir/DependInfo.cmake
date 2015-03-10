@@ -8,6 +8,11 @@ set(CMAKE_DEPENDS_CHECK_C
   )
 set(CMAKE_C_COMPILER_ID "SXC")
 
+# Preprocessor definitions for this target.
+set(CMAKE_TARGET_DEFINITIONS
+  "NDEBUG"
+  )
+
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
   )
