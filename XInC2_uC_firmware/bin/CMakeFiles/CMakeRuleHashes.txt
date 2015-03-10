@@ -1,0 +1,7 @@
+# Hashes of file build rules.
+22d0c4a1f1531d1009ffdb1f114ade26 CMakeFiles/RFID-reader-hex
+db31e35d2d0b9963cde877353223dc16 RFID-reader.dep
+bbc79ebac038acaa51726eaa94f5bde9 RFID-reader.hex
+7ec62247d589efd605e689c57cb323b6 RFID-reader.main
+7c8e204570c03cad7d06db7165661970 RFID-reader.opt
+18712ebe00e383c5c6f1be3fbec5766b RFID-reader.s

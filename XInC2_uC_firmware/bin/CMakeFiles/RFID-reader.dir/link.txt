@@ -1,0 +1,1 @@
+C:\PROGRA~2\SXC\bin\SXC-NO~2.EXE -o RFID-reader.a  CMakeFiles/RFID-reader.dir/main.c.obj  
