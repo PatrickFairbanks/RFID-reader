@@ -6,18 +6,6 @@
 
 #IncludeRegexTransform: 
 
-../inc/UART.h
-SXC.h
-../inc/SXC.h
-SFU.h
-../inc/SFU.h
-GPIO.h
-../inc/GPIO.h
-SystemClock.h
-../inc/SystemClock.h
-Structs.h
-../inc/Structs.h
-
 ../inc/struct_aliases.h
 
 ../inc/time_funcs.h
@@ -87,6 +75,18 @@ SXC.h
 C:/Program Files (x86)/SXC/include/sxc-lib/SXC.h
 register_consts.h
 C:/Program Files (x86)/SXC/include/sxc-lib/register_consts.h
+
+C:/Program Files (x86)/SXC/include/sxc-lib/UART.h
+SXC.h
+C:/Program Files (x86)/SXC/include/sxc-lib/SXC.h
+SFU.h
+C:/Program Files (x86)/SXC/include/sxc-lib/SFU.h
+GPIO.h
+C:/Program Files (x86)/SXC/include/sxc-lib/GPIO.h
+SystemClock.h
+C:/Program Files (x86)/SXC/include/sxc-lib/SystemClock.h
+Structs.h
+C:/Program Files (x86)/SXC/include/sxc-lib/Structs.h
 
 C:/Program Files (x86)/SXC/include/sxc-lib/XPD.h
 SXC.h
