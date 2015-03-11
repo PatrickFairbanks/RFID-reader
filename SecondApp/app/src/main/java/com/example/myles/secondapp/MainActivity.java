@@ -17,6 +17,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Set;
+import java.util.UUID;
+
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -37,9 +39,6 @@ public class MainActivity extends ActionBarActivity {
     CharSequence swapped = "Swapped";
     CharSequence BlueToothAlreadyOn = "Bluetooth Already On";
     int duration = Toast.LENGTH_SHORT;
-
-
-
 
 
     @Override
@@ -67,40 +66,40 @@ public class MainActivity extends ActionBarActivity {
     }
 
     //Function called when refresh button is pressed
-    public void refresh(View view){
+    public void refresh(View view) {
         Context context = getApplicationContext();
         Toast toast = Toast.makeText(context, REFRESH, duration);
         toast.show();
     }
 
     //Function called when delete A button is pressed
-    public void deleteA(View view){
+    public void deleteA(View view) {
         Context context = getApplicationContext();
         Toast toast = Toast.makeText(context, delA, duration);
         toast.show();
     }
 
     //Function called when delete B button is pressed
-    public void deleteB(View view){
+    public void deleteB(View view) {
         Context context = getApplicationContext();
         Toast toast = Toast.makeText(context, delB, duration);
         toast.show();
     }
 
     //Function called when delete B button is pressed
-    public void conA(View view){
+    public void conA(View view) {
         Context context = getApplicationContext();
         Toast toast = Toast.makeText(context, consA, duration);
         toast.show();
     }
 
-    public void conB(View view){
+    public void conB(View view) {
         Context context = getApplicationContext();
         Toast toast = Toast.makeText(context, consB, duration);
         toast.show();
     }
 
-    public void swap(View view){
+    public void swap(View view) {
         Context context = getApplicationContext();
         Toast toast = Toast.makeText(context, swapped, duration);
         toast.show();
@@ -128,5 +127,49 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-}
+    private class ConnectThread extends Thread {
+        private final BluetoothSocket mmSocket;
+        private final BluetoothDevice mmDevice;
+        public UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
+        public ConnectThread(BluetoothDevice device) {
+            // Use a temporary object that is later assigned to mmSocket,
+            // because mmSocket is final
+            BluetoothSocket tmp = null;
+            mmDevice = device;
+
+            // Get a BluetoothSocket to connect with the given BluetoothDevice
+            try {
+                // MY_UUID is the app's UUID string, also used by the server code
+                tmp = device.createRfcommSocketToServiceRecord(MY_UUID);
+            } catch (IOException e) {
+            }
+            mmSocket = tmp;
+        }
+        public void run() {
+            // Cancel discovery because it will slow down the connection
+            mBluetoothAdapter.cancelDiscovery();
+
+            try {
+                // Connect the device through the socket. This will block
+                // until it succeeds or throws an exception
+                mmSocket.connect();
+            } catch (IOException connectException) {
+                // Unable to connect; close the socket and get out
+                try {
+                    mmSocket.close();
+                } catch (IOException closeException) { }
+                return;
+            }
+
+            // Do work to manage the connection (in a separate thread)
+            manageConnectedSocket(mmSocket);
+        }
+    }
+
+    private void manageConnectedSocket(BluetoothSocket mmSocket)
+    {
+        // Some garbage with the socket.
+        runOnUiThread()
+    }
+}

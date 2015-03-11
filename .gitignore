@@ -69,3 +69,9 @@ proguard/
 
 # Log Files
 *.log
+SecondApp/.idea/gradle.xml
+SecondApp/SecondApp.iml
+SecondApp/SecondApp.iml
+SecondApp/app/build.gradle
+SecondApp/app/app.iml
+SecondApp/.idea/misc.xml
