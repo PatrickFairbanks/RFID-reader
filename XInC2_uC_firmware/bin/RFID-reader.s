@@ -68,59 +68,59 @@ sxc_main:                               // @main
 // BB#0:
 	add	sp, sp, 0x3
 	st	r6, sp, 0xfffd          // 1-byte Folded Spill
-	inp	r0, 0x20
-	and	r0, r0, 0xfffe
-	outp	r0, 0x20
+	inp	r0, 0x26
+	and	r0, r0, 0xffdf
+	outp	r0, 0x26
 	inp	r0, 0x3
 	inp	r0, 0x3
-	inp	r0, 0x20
-	ior	r0, r0, 0x1
-	outp	r0, 0x20
+	inp	r0, 0x26
+	ior	r0, r0, 0x20
+	outp	r0, 0x26
 	inp	r0, 0x3
 	inp	r0, 0x3
-	inp	r0, 0x20
-	and	r0, r0, 0xfffe
-	outp	r0, 0x20
+	inp	r0, 0x26
+	and	r0, r0, 0xffdf
+	outp	r0, 0x26
 	inp	r0, 0x3
 	inp	r0, 0x3
-	inp	r0, 0x20
-	and	r0, r0, 0xfffe
-	outp	r0, 0x20
+	inp	r0, 0x26
+	and	r0, r0, 0xffdf
+	outp	r0, 0x26
 	inp	r0, 0x3
 	inp	r0, 0x3
-	inp	r0, 0x20
-	and	r0, r0, 0xfffe
-	outp	r0, 0x20
+	inp	r0, 0x26
+	and	r0, r0, 0xffdf
+	outp	r0, 0x26
 	inp	r0, 0x3
 	inp	r0, 0x3
-	inp	r0, 0x20
-	and	r0, r0, 0xfffe
-	outp	r0, 0x20
+	inp	r0, 0x26
+	and	r0, r0, 0xffdf
+	outp	r0, 0x26
 	inp	r0, 0x3
 	inp	r0, 0x3
-	inp	r0, 0x20
-	ior	r0, r0, 0x1
-	outp	r0, 0x20
+	inp	r0, 0x26
+	ior	r0, r0, 0x20
+	outp	r0, 0x26
 	inp	r0, 0x3
 	inp	r0, 0x3
-	inp	r0, 0x20
-	ior	r0, r0, 0x1
-	outp	r0, 0x20
+	inp	r0, 0x26
+	ior	r0, r0, 0x20
+	outp	r0, 0x26
 	inp	r0, 0x3
 	inp	r0, 0x3
-	inp	r0, 0x20
-	and	r0, r0, 0xfffe
-	outp	r0, 0x20
+	inp	r0, 0x26
+	and	r0, r0, 0xffdf
+	outp	r0, 0x26
 	inp	r0, 0x3
 	inp	r0, 0x3
-	inp	r0, 0x20
-	ior	r0, r0, 0x1
-	outp	r0, 0x20
+	inp	r0, 0x26
+	ior	r0, r0, 0x20
+	outp	r0, 0x26
 	inp	r0, 0x3
 	inp	r0, 0x3
 BB3_1:                                  // =>This Inner Loop Header: Depth=1
 	inp	r0, 0x26
-	bic	r0, r0, 0x5
+	bic	r0, r0, 0x4
 	//cmp	r0, 0x0
 	bc	VS, BB3_1
 // BB#2:                                // %.preheader.i
@@ -130,66 +130,66 @@ BB3_1:                                  // =>This Inner Loop Header: Depth=1
 	inp	r0, 0x3
 	inp	r0, 0x3
 	inp	r0, 0x26
-	and	r0, r0, 0xfff0
-	rol	r0, r0, 0xc
-	and	r0, r0, 0xffe
-	st	r0, sp, 0xfffe          // 1-byte Folded Spill
-	inp	r0, 0x3
-	inp	r0, 0x3
-	inp	r0, 0x26
 	and	r0, r0, 0xfff8
 	rol	r0, r0, 0xd
-	and	r0, r0, 0x1ffc
-	st	r0, sp, 0xffff          // 1-byte Folded Spill
+	and	r0, r0, 0x1ffe
+	st	r0, sp, 0xfffe          // 1-byte Folded Spill
 	inp	r0, 0x3
 	inp	r0, 0x3
 	inp	r0, 0x26
 	and	r0, r0, 0xfffc
 	rol	r0, r0, 0xe
-	and	r4, r0, 0x3ff8
+	and	r0, r0, 0x3ffc
+	st	r0, sp, 0xffff          // 1-byte Folded Spill
 	inp	r0, 0x3
 	inp	r0, 0x3
 	inp	r0, 0x26
 	inp	r1, 0x3
 	inp	r1, 0x3
-	inp	r5, 0x26
+	inp	r4, 0x26
 	and	r0, r0, 0xfffe
 	rol	r0, r0, 0xf
-	and	r6, r0, 0x7ff0
+	and	r5, r0, 0x7ff8
 	inp	r0, 0x3
 	inp	r0, 0x3
 	inp	r0, 0x26
 	and	r0, r0, 0x7fff
 	rol	r0, r0, 0x1
+	and	r6, r0, 0xffe0
+	inp	r0, 0x3
+	inp	r0, 0x3
+	inp	r0, 0x26
+	and	r0, r0, 0x3fff
+	rol	r0, r0, 0x2
 	and	r0, r0, 0xffc0
 	inp	r1, 0x3
 	inp	r1, 0x3
 	inp	r1, 0x26
-	and	r1, r1, 0x3fff
-	rol	r1, r1, 0x2
+	and	r1, r1, 0x1fff
+	rol	r1, r1, 0x3
 	and	r2, r1, 0xff80
 	inp	r1, 0x3
 	inp	r1, 0x3
 BB3_3:                                  // =>This Inner Loop Header: Depth=1
 	inp	r1, 0x26
-	bic	r1, r1, 0x5
+	bic	r1, r1, 0x4
 	//cmp	r1, 0x0
 	bc	VC, BB3_3
 // BB#4:                                // %uart_read_byte.exit
 	ld	r1, sp, 0xfffe          // 1-byte Folded Reload
 	and	r1, r1, 0x2
-	and	r3, r3, 0xffe0
-	rol	r3, r3, 0xb
+	and	r3, r3, 0xfff0
+	rol	r3, r3, 0xc
 	and	r3, r3, 0x1
 	ior	r1, r1, r3
 	ld	r3, sp, 0xffff          // 1-byte Folded Reload
 	and	r3, r3, 0x4
 	ior	r1, r1, r3
-	and	r3, r4, 0x8
+	and	r3, r5, 0x8
 	ior	r1, r1, r3
-	and	r3, r6, 0x10
+	and	r3, r4, 0x10
 	ior	r1, r1, r3
-	and	r3, r5, 0x20
+	and	r3, r6, 0x20
 	ior	r1, r1, r3
 	and	r0, r0, 0x40
 	ior	r0, r1, r0

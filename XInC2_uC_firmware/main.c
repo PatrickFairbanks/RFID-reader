@@ -12,7 +12,7 @@
 #include "struct_aliases.h"
 #include "UART.h"
 
-static const UART_Pin_Pair btPair = { LED4, LED5, 0 };
+static const UART_Pin_Pair btPair = { LED3, LED4, 0 };
 
 void init()
 {

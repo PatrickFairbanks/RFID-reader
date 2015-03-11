@@ -251,61 +251,61 @@ define void @init() nounwind readnone {
 }
 
 define i16 @main() nounwind {
-  %1 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 32) nounwind
-  %2 = and i16 %1, -2
-  tail call void @llvm.XInC2.outp(i16 zeroext %2, i16 zeroext 32) nounwind
+  %1 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 38) nounwind
+  %2 = and i16 %1, -33
+  tail call void @llvm.XInC2.outp(i16 zeroext %2, i16 zeroext 38) nounwind
   %3 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
   %4 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
-  %5 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 32) nounwind
-  %6 = or i16 %5, 1
-  tail call void @llvm.XInC2.outp(i16 zeroext %6, i16 zeroext 32) nounwind
+  %5 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 38) nounwind
+  %6 = or i16 %5, 32
+  tail call void @llvm.XInC2.outp(i16 zeroext %6, i16 zeroext 38) nounwind
   %7 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
   %8 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
-  %9 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 32) nounwind
-  %10 = and i16 %9, -2
-  tail call void @llvm.XInC2.outp(i16 zeroext %10, i16 zeroext 32) nounwind
+  %9 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 38) nounwind
+  %10 = and i16 %9, -33
+  tail call void @llvm.XInC2.outp(i16 zeroext %10, i16 zeroext 38) nounwind
   %11 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
   %12 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
-  %13 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 32) nounwind
-  %14 = and i16 %13, -2
-  tail call void @llvm.XInC2.outp(i16 zeroext %14, i16 zeroext 32) nounwind
+  %13 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 38) nounwind
+  %14 = and i16 %13, -33
+  tail call void @llvm.XInC2.outp(i16 zeroext %14, i16 zeroext 38) nounwind
   %15 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
   %16 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
-  %17 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 32) nounwind
-  %18 = and i16 %17, -2
-  tail call void @llvm.XInC2.outp(i16 zeroext %18, i16 zeroext 32) nounwind
+  %17 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 38) nounwind
+  %18 = and i16 %17, -33
+  tail call void @llvm.XInC2.outp(i16 zeroext %18, i16 zeroext 38) nounwind
   %19 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
   %20 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
-  %21 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 32) nounwind
-  %22 = and i16 %21, -2
-  tail call void @llvm.XInC2.outp(i16 zeroext %22, i16 zeroext 32) nounwind
+  %21 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 38) nounwind
+  %22 = and i16 %21, -33
+  tail call void @llvm.XInC2.outp(i16 zeroext %22, i16 zeroext 38) nounwind
   %23 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
   %24 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
-  %25 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 32) nounwind
-  %26 = or i16 %25, 1
-  tail call void @llvm.XInC2.outp(i16 zeroext %26, i16 zeroext 32) nounwind
+  %25 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 38) nounwind
+  %26 = or i16 %25, 32
+  tail call void @llvm.XInC2.outp(i16 zeroext %26, i16 zeroext 38) nounwind
   %27 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
   %28 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
-  %29 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 32) nounwind
-  %30 = or i16 %29, 1
-  tail call void @llvm.XInC2.outp(i16 zeroext %30, i16 zeroext 32) nounwind
+  %29 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 38) nounwind
+  %30 = or i16 %29, 32
+  tail call void @llvm.XInC2.outp(i16 zeroext %30, i16 zeroext 38) nounwind
   %31 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
   %32 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
-  %33 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 32) nounwind
-  %34 = and i16 %33, -2
-  tail call void @llvm.XInC2.outp(i16 zeroext %34, i16 zeroext 32) nounwind
+  %33 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 38) nounwind
+  %34 = and i16 %33, -33
+  tail call void @llvm.XInC2.outp(i16 zeroext %34, i16 zeroext 38) nounwind
   %35 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
   %36 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
-  %37 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 32) nounwind
-  %38 = or i16 %37, 1
-  tail call void @llvm.XInC2.outp(i16 zeroext %38, i16 zeroext 32) nounwind
+  %37 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 38) nounwind
+  %38 = or i16 %37, 32
+  tail call void @llvm.XInC2.outp(i16 zeroext %38, i16 zeroext 38) nounwind
   %39 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
   %40 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
   br label %41
 
 ; <label>:41                                      ; preds = %41, %0
   %42 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 38) nounwind
-  %.lobit.i.i = and i16 %42, 32
+  %.lobit.i.i = and i16 %42, 16
   %43 = icmp eq i16 %.lobit.i.i, 0
   br i1 %43, label %.preheader.i, label %41
 
@@ -313,45 +313,45 @@ define i16 @main() nounwind {
   %44 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
   %45 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
   %46 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 38) nounwind
-  %47 = lshr i16 %46, 5
+  %47 = lshr i16 %46, 4
   %48 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
   %49 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
   %50 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 38) nounwind
-  %51 = lshr i16 %50, 5
+  %51 = lshr i16 %50, 4
   %.lobit.i2.1.i = shl nuw nsw i16 %51, 1
   %52 = and i16 %.lobit.i2.1.i, 2
   %53 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
   %54 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
   %55 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 38) nounwind
-  %56 = lshr i16 %55, 5
+  %56 = lshr i16 %55, 4
   %.lobit.i2.2.i = shl nuw nsw i16 %56, 2
   %57 = and i16 %.lobit.i2.2.i, 4
   %58 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
   %59 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
   %60 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 38) nounwind
-  %61 = lshr i16 %60, 5
+  %61 = lshr i16 %60, 4
   %.lobit.i2.3.i = shl nuw nsw i16 %61, 3
   %62 = and i16 %.lobit.i2.3.i, 8
   %63 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
   %64 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
   %65 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 38) nounwind
-  %66 = lshr i16 %65, 5
-  %.lobit.i2.4.i = shl nuw nsw i16 %66, 4
-  %67 = and i16 %.lobit.i2.4.i, 16
-  %68 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
-  %69 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
-  %70 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 38) nounwind
-  %.lobit.i2.5.i = and i16 %70, 32
+  %.lobit.i2.4.i = and i16 %65, 16
+  %66 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
+  %67 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
+  %68 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 38) nounwind
+  %69 = lshr i16 %68, 4
+  %.lobit.i2.5.i = shl i16 %69, 5
+  %70 = and i16 %.lobit.i2.5.i, 32
   %71 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
   %72 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
   %73 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 38) nounwind
-  %74 = lshr i16 %73, 5
+  %74 = lshr i16 %73, 4
   %.lobit.i2.6.i = shl i16 %74, 6
   %75 = and i16 %.lobit.i2.6.i, 64
   %76 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
   %77 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
   %78 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 38) nounwind
-  %79 = lshr i16 %78, 5
+  %79 = lshr i16 %78, 4
   %.lobit.i2.7.i = shl i16 %79, 7
   %80 = and i16 %.lobit.i2.7.i, 128
   %81 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 3) nounwind
@@ -360,7 +360,7 @@ define i16 @main() nounwind {
 
 ; <label>:83                                      ; preds = %83, %.preheader.i
   %84 = tail call zeroext i16 @llvm.XInC2.inp(i16 zeroext 38) nounwind
-  %.lobit.i1.i = and i16 %84, 32
+  %.lobit.i1.i = and i16 %84, 16
   %85 = icmp eq i16 %.lobit.i1.i, 0
   br i1 %85, label %83, label %uart_read_byte.exit
 
@@ -369,8 +369,8 @@ uart_read_byte.exit:                              ; preds = %83
   %86 = or i16 %52, %.lobit.i2.i
   %87 = or i16 %86, %57
   %88 = or i16 %87, %62
-  %89 = or i16 %88, %67
-  %90 = or i16 %89, %.lobit.i2.5.i
+  %89 = or i16 %88, %.lobit.i2.4.i
+  %90 = or i16 %89, %70
   %91 = or i16 %90, %75
   %92 = add i16 %80, %91
   tail call void asm sideeffect "//Asserting number to R1 for XPD_EchoUnsignedDec\0A\09jsr\09r6, XPD_EchoUnsignedDec", "{R1},~{R1},~{R6}"(i16 %92) nounwind, !srcloc !3
