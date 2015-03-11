@@ -1,0 +1,21 @@
+var searchData=
+[
+  ['sem_5fdestroy_5fall',['sem_destroy_all',['../_semaphore_8h.html#aa43d9f5a8049325b50819852c93cd7a9',1,'Semaphore.h']]],
+  ['sem_5finit_5fall',['sem_init_all',['../_semaphore_8h.html#a084dabf71d1ab16760bc6c64c2f223fa',1,'Semaphore.h']]],
+  ['sem_5flock',['sem_lock',['../_semaphore_8h.html#a9fb1cd2ffba3c551ec9750bf9c857aa6',1,'Semaphore.h']]],
+  ['sem_5funlock',['sem_unlock',['../_semaphore_8h.html#ad2416cd966a9f20d7746f640c6f85bc6',1,'Semaphore.h']]],
+  ['sem_5funlock_5fall',['sem_unlock_all',['../_semaphore_8h.html#a22a6ce4b595e43691b8644648f2cccc7',1,'Semaphore.h']]],
+  ['sfu_5fleast_5fsignificant_5fone',['sfu_least_significant_one',['../_s_f_u_8h.html#ab3c0f99ba892c6009a3c678295a47c89',1,'SFU.h']]],
+  ['sfu_5fpack_5fbits',['sfu_pack_bits',['../_s_f_u_8h.html#ae02187a43e590ad3b7b1ebc939d9f11c',1,'SFU.h']]],
+  ['sfu_5fpop_5fcount',['sfu_pop_count',['../_s_f_u_8h.html#a02aa6a32bc9413aac8c5c49cb58737b1',1,'SFU.h']]],
+  ['sfu_5freverse_5fbits',['sfu_reverse_bits',['../_s_f_u_8h.html#a26ea9f2ec3db4c0d0770b6473727d321',1,'SFU.h']]],
+  ['spi_5fget_5fconfig',['SPI_get_config',['../_s_p_i_8h.html#a4fa48b8f24e6a63cb8c386daf50395c1',1,'SPI.h']]],
+  ['spi_5fread',['SPI_read',['../_s_p_i_8h.html#af0d9123842ab136acc624ddc96d2d9d8',1,'SPI.h']]],
+  ['spi_5fset_5fconfig',['SPI_set_config',['../_s_p_i_8h.html#a305de50ded54b4280ed23b75f204c6eb',1,'SPI.h']]],
+  ['spi_5fset_5fconfig_5foptimal',['SPI_set_config_optimal',['../_s_p_i_8h.html#a01721986cdfee7c721b029afc03c5c01',1,'SPI.h']]],
+  ['spi_5fwrite',['SPI_write',['../_s_p_i_8h.html#abc4483cdf9d65ab1c9d3a8673e33b1b5',1,'SPI.h']]],
+  ['sys_5fclock_5fget_5fscu_5ftime',['sys_clock_get_scu_time',['../_system_clock_8h.html#a34aebfcdb143498dc9087fc04a41e3e9',1,'SystemClock.h']]],
+  ['sys_5fclock_5finit',['sys_clock_init',['../_system_clock_8h.html#af409a6e42ad9aecbd06e18c496c25568',1,'SystemClock.h']]],
+  ['sys_5fclock_5fticks_5fper_5fms_5fslice',['sys_clock_ticks_per_ms_slice',['../_system_clock_8h.html#a2cd53c28b8728cf836f5646f163f7f19',1,'SystemClock.h']]],
+  ['sys_5fclock_5fwait',['sys_clock_wait',['../_system_clock_8h.html#aa47c671093864f23f20d6c63b256255f',1,'SystemClock.h']]]
+];
