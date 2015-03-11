@@ -1,2 +1,0 @@
-C:/Users/Andrew/Documents/GitHub/RFID-reader/XInC2_uC_firmware/bin/CMakeFiles/RFID-reader.dir
-C:/Users/Andrew/Documents/GitHub/RFID-reader/XInC2_uC_firmware/bin/CMakeFiles/RFID-reader-hex.dir
