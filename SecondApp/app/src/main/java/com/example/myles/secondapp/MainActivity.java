@@ -15,8 +15,10 @@ import java.lang.reflect.Method;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Set;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 import android.content.Context;
 import android.content.Intent;
@@ -33,8 +35,9 @@ public class MainActivity extends ActionBarActivity {
     CharSequence consA = "Consolidated on A";
     CharSequence consB = "Consolidated on B";
     CharSequence swapped = "Swapped";
+    CharSequence BlueToothAlreadyOn = "Bluetooth Already On";
     int duration = Toast.LENGTH_SHORT;
-    ArrayAdapter mArrayAdapter;
+
 
 
 
@@ -47,25 +50,19 @@ public class MainActivity extends ActionBarActivity {
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (mBluetoothAdapter != null) {
-            if(mBluetoothAdapter.isEnabled()){
-                //toast that things are ready
-            }
-            else{
+            if (mBluetoothAdapter.isEnabled()) {
+                Context context = getApplicationContext();
+                Toast toast = Toast.makeText(context, BlueToothAlreadyOn, duration);
+                toast.show();
+            } else {
                 Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
             }
-        }
-        else{
+        } else {
             //no bluetooth device, not really a worry for me
-        }
-        Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
-        // If there are paired devices
-        if (pairedDevices.size() > 0) {
-            // Loop through paired devices
-            for (BluetoothDevice device : pairedDevices) {
-                // Add the name and address to an array adapter to show in a ListView
-                mArrayAdapter.add(device.getName() + "\n" + device.getAddress());
-            }
+            Context context = getApplicationContext();
+            Toast toast = Toast.makeText(context, "No Bluetooth Device Detected", duration);
+            toast.show();
         }
     }
 
