@@ -41,14 +41,3 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
-
-# Build files for XinC2
-.hex
-.asm
-.main
-.s
-.opt
-.lst
-.dep
-.bin
-.a
