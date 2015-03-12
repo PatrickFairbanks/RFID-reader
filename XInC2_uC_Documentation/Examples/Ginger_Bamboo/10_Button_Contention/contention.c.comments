@@ -1,0 +1,47 @@
+/* Author: Thia Wyrod
+ * License: GPLv3
+ */
+#include <stdlib.h>
+#include <Structs.h>
+#include <Thread.h>
+#include <Semaphore.h>
+
+#include "time_funcs.h"
+#include "struct_aliases.h"
+
+typedef struct Button_LED_Pair {
+  GlobalPin const LED;
+  GlobalPin const button;
+} Button_LED_Pair;
+
+Button_LED_Pair const button_led_pairs[] = {
+  { LED1, SW0 }, { LED2, SW1 }, { LED3, SW2 }, { LED4, SW3 }
+};
+static const size_t kNumPairs = sizeof(button_led_pairs)/sizeof(*button_led_pairs);
+
+static const uint16_t kLEDLockSemNum = 0;
+
+static void* led_thread(void* pair_ptr)
+{
+  Button_LED_Pair const * const pair = (Button_LED_Pair const * const)(pair_ptr); 
+  while(1) {
+    //if the button is ON, acquire the LED lock semaphore
+    //keep the LED on while the button is pushed
+    //as soon as the button is released, switch off the LED
+    //release the semaphore
+  }
+  return NULL;
+}
+
+int main(void)
+{
+  init_clock();
+  for (size_t i = 0; i < kNumPairs; ++i) {
+    //configure the IO of each LED and each button
+    //set the direction of each LED and each button
+    //make the LED OFF by default
+    //setup and start each thread: remember that main thread is thread 0
+  }
+  while(1) {}
+  return 0;
+}
