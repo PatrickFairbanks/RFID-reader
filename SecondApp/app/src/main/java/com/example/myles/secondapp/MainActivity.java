@@ -28,8 +28,8 @@ import android.content.Intent;
 
 public class MainActivity extends ActionBarActivity {
 
-    private OutputStream outputStream;
-    private InputStream inStream;
+    private OutputStream mmoutStream;
+    private InputStream mminStream;
     BluetoothAdapter mBluetoothAdapter;
     CharSequence REFRESH = "Refreshed!";
     CharSequence delA = "A Deleted";
@@ -39,6 +39,9 @@ public class MainActivity extends ActionBarActivity {
     CharSequence swapped = "Swapped";
     CharSequence BlueToothAlreadyOn = "Bluetooth Already On";
     int duration = Toast.LENGTH_SHORT;
+
+    //need to write a set of byte sequences for the refresh, delete, consolidate and swap to call
+    //to write to output streams
 
 
     @Override
@@ -169,7 +172,45 @@ public class MainActivity extends ActionBarActivity {
 
     private void manageConnectedSocket(BluetoothSocket mmSocket)
     {
+        InputStream tmpIn = null;
+        OutputStream tmpOut = null;
         // Some garbage with the socket.
-        runOnUiThread()
+
+        try {
+            tmpIn = socket.getInputStream();
+            tmpOut = socket.getOutputStream();
+        } catch (IOException e) { }
+
+        mminStream = tmpIn;
+        mmoutStream = tmpOut;
+    }
+
+    public void inStreamListen(){
+        byte[] buffer = new byte[1024];  // buffer store for the stream
+        int readBytes;  // bytes read from input stream/from read
+
+        while (true) {
+            try {
+                // Read from the InputStream
+                readBytes = mminStream.read(buffer);
+                // Send the obtained bytes to the UI activity
+                mHandler.obtainMessage(MESSAGE_READ, readBytes, -1, buffer)
+                        .sendToTarget();
+            } catch (IOException e) {
+                break;
+            }
+        }
+    }
+
+    public void write(byte[] bytes) {
+        try {
+            mmoutStream.write(bytes);
+        } catch (IOException e) { }
+    }
+
+    public void cancel() {
+        try {
+            mmSocket.close();
+        } catch (IOException e) { }
     }
 }
