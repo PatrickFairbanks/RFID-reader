@@ -1,0 +1,164 @@
+//These are the functions that will be used for the Transceiver
+//It includes the Configuration needed on start up to get ready to Transmit a signal,
+//As well as a function that switches the configuration to a Majority Voting Receive Mode.
+//There are two Functions that will set the RTM input on the transceiver high or low, for transmit / receive.
+//One function used to store every third bit of data from the DSYNC / DOUT pins from the transceiver
+//^This is how to store the Received and filtered data
+
+//Include Headers
+
+#include <GPIO.h>   //eleven engineering SXC Library on bitbucket
+#include <IOConfig.h>
+#include <Structs.h>
+#include <XPD.h>
+
+#include "time_funcs.h"
+#include "struct_aliases.h"
+#include "UART.h"
+
+// These are what the data sheet says the addresses are for the configuration
+// registers in the MLX90121. Who knows really
+
+#define AnlgCnfg 0
+#define PwrState 1
+#define DgtlCnfg 3
+#define EncSym0 4
+#define EncSym1 5
+#define EncSym2 6
+#define EncSym3 7
+#define EncSym4 8
+#define EncSym5 9
+#define EncTimeRef 10
+#define DecTimeRef 11
+#define LTC 12
+
+#define Tmodwidth 5   //5 microseconds. Needed as the minimum time between successive register writings.
+
+
+//These Define the data transmit to set receive bit and mode bit high.
+//Just in case, pretty sure this is just dumb and we don't need it.
+
+#define RECEIVE 0x001
+#define TRANSMIT 0x000
+#define PACKAGESIZE 12
+
+static const GlobalPin DIN = {GPIO_C,io_PC7,0x8, Polar_ActiveHigh}; //C7
+static const GlobalPin DOUT = {GPIO_C,io_PC6,0x7, Polar_ActiveHigh}; //C6
+static const GlobalPin DSYNC = {GPIO_C,io_PC5,0x6, Polar_ActiveHigh}; //C5
+static const GlobalPin CK = {GPIO_C,io_PC4,0x5, Polar_ActiveHigh}; //C4
+static const GlobalPin MODE = {GPIO_D,io_PD2,0x20, Polar_ActiveHigh}; //D2
+static const GlobalPin RTB = {GPIO_D,io_PD3,0x30, Polar_ActiveHigh}; //D3
+static const size_t kMsPerCycle = 1; //Figure out how to change this to microseconds
+
+
+
+//These functions pull the DIN pin high or low, depending on what operation is needed to be done
+//By default, Din should be held high.
+//Situations where Din should be pulled low: communication mode, modulation between successive writes to registers.
+
+void dataHigh()
+{
+	globalPin_write(ON,&DIN);
+}
+
+void dataLow()
+{
+	globalPin_write(OFF,DIN);
+}
+
+//These Functions set the bits of the RTB input and Mode input of the Transceiver
+//THEY MUST BE USED BEFORE CONFIGURING, TRANSMITTING, OR RECEIVING
+
+
+void configMode()
+{
+	globalPin_write(OFF,&RTB);
+	globalPin_write(OFF,&MODE);
+}
+
+void receiveMode()
+{
+	globalPin_write(ON,&RTB);
+	globalPin_write(ON,&MODE);
+}
+
+void transmitMode()
+{
+	globalPin_write(OFF,&RTB);
+	globalPin_write(ON,&MODE);
+	
+}
+
+//Any other pins that need to be written high or low can be done in this format.
+
+//used for configuration mode.
+
+void tModDelay()
+{
+	transmitMode;
+	//look up function for wait in XINC2
+}
+
+
+//This is the function for Transmit Configuration Mode. It is a 12 bit code.
+//The first 4 bits will indicate the address of the register being modified
+//The next 8 bits will be the modification.
+// 0's are written in the unused bits
+
+int startConfig()
+{
+	
+	// This function sets which pins are input and which pins are output. 
+	// Needs pin numbers for Xinc2 and input/output for transceiver
+	
+	globalPin_set_dir(PinDir_Output, &MODE);
+	globalPin_set_dir(PinDir_Output, &RTB);
+	globalPin_set_dir(PinDir_Output, &DIN);
+	globalPin_set_dir(PinDir_Input, &CK);
+	globalPin_set_dir(PinDir_Input, &DOUT);
+	globalPin_set_dir(PinDir_Input, &DSYNC);
+	
+	//dataHigh();
+	//configMode();
+	
+	//figure out how to change to majority voting mode.
+	
+	//tModeDelay;
+	//configMode();
+	
+	//Edit Other THings the same way
+	dataLow();
+}
+
+int main(){
+	
+	startConfig();
+	transmitMode();
+	init_clock();
+	while(1){
+		switch case:
+			case 1: readdata == 0 {
+				
+				receiveMode;
+				//check if buffer is ready
+				//read data from buffer
+				readdata = false;
+				break;			
+			}
+			case 2: writedata == true {
+				transmitMode;
+				//stream data through DOUT UART
+				writedata = false;
+				break;
+			}
+			case 3: swapdata == true {
+				receivemode;
+				//check if buffer for cards 1 / 2 are ready
+				transmitMode;
+				//write data from opposing buffers to cards
+				swapdata = false;
+				break;
+			}
+	}
+	return(0);
+}
