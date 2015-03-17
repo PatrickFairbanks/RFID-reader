@@ -14,9 +14,6 @@
     <string name="consolidate">To consolidate the data onto a card click the corresponding button that follows</string>
     <string name="swap">Swap</string>
     <string name="toSwap">To swap the card data press the button below</string>
-    <string name="dataToSend">To send data to a card enter it in the text box below and click the corresponding button to send it to the card of your choice</string>
-    <string name="sendDataField">Type data here</string>
-    <string name="sendButton">Send</string>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="grey">#333333</color>

@@ -39,6 +39,12 @@ public class MainActivity extends ActionBarActivity {
     CharSequence swapped = "Swapped";
     CharSequence BlueToothAlreadyOn = "Bluetooth Already On";
     int duration = Toast.LENGTH_SHORT;
+    byte[] DelA_ByteArray = [110111101010];
+    byte[] DelB_ByteArray = [110111101011];
+    byte[] ConA_ByteArray = [110000001010];
+    byte[] ConB_ByteArray = [110000001011];
+    byte[] Swap_ByteArray = [101110111111];
+    byte[] Ref_ByteArray = [110111011111];
 
     //need to write a set of byte sequences for the refresh, delete, consolidate and swap to call
     //to write to output streams
@@ -70,6 +76,7 @@ public class MainActivity extends ActionBarActivity {
 
     //Function called when refresh button is pressed
     public void refresh(View view) {
+        write(Ref_ByteArray);
         Context context = getApplicationContext();
         Toast toast = Toast.makeText(context, REFRESH, duration);
         toast.show();
@@ -77,6 +84,7 @@ public class MainActivity extends ActionBarActivity {
 
     //Function called when delete A button is pressed
     public void deleteA(View view) {
+        write(DelA_ByteArray);
         Context context = getApplicationContext();
         Toast toast = Toast.makeText(context, delA, duration);
         toast.show();
@@ -84,6 +92,7 @@ public class MainActivity extends ActionBarActivity {
 
     //Function called when delete B button is pressed
     public void deleteB(View view) {
+        write(DelB_ByteArray);
         Context context = getApplicationContext();
         Toast toast = Toast.makeText(context, delB, duration);
         toast.show();
@@ -91,18 +100,21 @@ public class MainActivity extends ActionBarActivity {
 
     //Function called when delete B button is pressed
     public void conA(View view) {
+        write(ConA_ByteArray);
         Context context = getApplicationContext();
         Toast toast = Toast.makeText(context, consA, duration);
         toast.show();
     }
 
     public void conB(View view) {
+        write(ConB_ByteArray);
         Context context = getApplicationContext();
         Toast toast = Toast.makeText(context, consB, duration);
         toast.show();
     }
 
     public void swap(View view) {
+        write(Swap_ByteArray);
         Context context = getApplicationContext();
         Toast toast = Toast.makeText(context, swapped, duration);
         toast.show();

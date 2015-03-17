@@ -77,18 +77,6 @@
                android:layout_gravity="center"
                android:text="@string/swap"
                android:onClick="swap"/>
-         <TextView
-              style="@style/textDisp"
-              android:text="Type the data you want to add to a card in the field below and click the corresponding button"/>
-         <EditText
-               android:layout_width="fill_parent"
-               android:layout_height="wrap_content"
-               android:hint="@string/sendDataField"/>
-         <Button
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:layout_gravity="center"
-             android:text="@string/sendButton"/>
      </LinearLayout>
     </ScrollView>
 </LinearLayout>
