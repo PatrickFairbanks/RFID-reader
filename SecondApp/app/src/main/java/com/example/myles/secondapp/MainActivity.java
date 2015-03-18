@@ -215,6 +215,8 @@ public class MainActivity extends ActionBarActivity {
         mmoutStream = tmpOut;
     }
 
+    byte[] arr = 'd';
+
     public void inStreamListen(){
         byte[] buffer = new byte[1024];  // buffer store for the stream
         int readBytes;  // bytes read from input stream/from read
