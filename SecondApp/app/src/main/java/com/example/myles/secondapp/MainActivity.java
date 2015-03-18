@@ -75,17 +75,19 @@ public class MainActivity extends ActionBarActivity {
         }
 
         Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
+        boolean bluetoothExists = false;
         for(BluetoothDevice device : pairedDevices)
         {
 
             String name = device.getName();
-            if( name.contains("RFID") )
+            if( name.contains("RFID") ) {
                 rnBoard = device;
+                bluetoothExists = true;
+            }
 
         }
-
-        myThread = new ConnectThread(rnBoard);
-
+        if(bluetoothExists)
+            myThread = new ConnectThread(rnBoard);
     }
 
     //Function called when refresh button is pressed
@@ -174,10 +176,11 @@ public class MainActivity extends ActionBarActivity {
             } catch (IOException e) {
             }
             mmSocket = tmp;
+            run();
         }
         public void run() {
             // Cancel discovery because it will slow down the connection
-            mBluetoothAdapter.cancelDiscovery();
+            // mBluetoothAdapter.cancelDiscovery();
 
             try {
                 // Connect the device through the socket. This will block
