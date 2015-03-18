@@ -28,9 +28,13 @@ import android.content.Intent;
 
 public class MainActivity extends ActionBarActivity {
 
+    ConnectThread myThread;
+
+    private BluetoothSocket mmSocket;
     private OutputStream mmoutStream;
     private InputStream mminStream;
     BluetoothAdapter mBluetoothAdapter;
+    private BluetoothDevice rnBoard;
     CharSequence REFRESH = "Refreshed!";
     CharSequence delA = "A Deleted";
     CharSequence delB = "B Deleted";
@@ -39,12 +43,12 @@ public class MainActivity extends ActionBarActivity {
     CharSequence swapped = "Swapped";
     CharSequence BlueToothAlreadyOn = "Bluetooth Already On";
     int duration = Toast.LENGTH_SHORT;
-    byte[] DelA_ByteArray = [110111101010]; //0xDEA
-    byte[] DelB_ByteArray = [110111101011]; //0xDEB
-    byte[] ConA_ByteArray = [110000001010]; //0xC0A
-    byte[] ConB_ByteArray = [110000001011]; //0xC0B
-    byte[] Swap_ByteArray = [101110111111]; //0xBBF
-    byte[] Ref_ByteArray = [110111011111];  //0xCCF
+    byte[] DelA_ByteArray = "dea".getBytes();
+    byte[] DelB_ByteArray = "deb".getBytes();
+    byte[] ConA_ByteArray = "coa".getBytes();
+    byte[] ConB_ByteArray = "cob".getBytes();
+    byte[] Swap_ByteArray = "swa".getBytes();
+    byte[] Ref_ByteArray = "ref".getBytes();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,12 +66,26 @@ public class MainActivity extends ActionBarActivity {
                 Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
             }
+
         } else {
             //no bluetooth device, not really a worry for me
             Context context = getApplicationContext();
             Toast toast = Toast.makeText(context, "No Bluetooth Device Detected", duration);
             toast.show();
         }
+
+        Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
+        for(BluetoothDevice device : pairedDevices)
+        {
+
+            String name = device.getName();
+            if( name.contains("RFID") )
+                rnBoard = device;
+
+        }
+
+        myThread = new ConnectThread(rnBoard);
+
     }
 
     //Function called when refresh button is pressed
@@ -178,8 +196,9 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
-    private void manageConnectedSocket(BluetoothSocket mmSocket)
+    private void manageConnectedSocket(BluetoothSocket socket)
     {
+        mmSocket = socket;
         InputStream tmpIn = null;
         OutputStream tmpOut = null;
         // Some garbage with the socket.
@@ -202,8 +221,8 @@ public class MainActivity extends ActionBarActivity {
                 // Read from the InputStream
                 readBytes = mminStream.read(buffer);
                 // Send the obtained bytes to the UI activity
-                mHandler.obtainMessage(MESSAGE_READ, readBytes, -1, buffer)
-                        .sendToTarget();
+                //mHandler.obtainMessage(MESSAGE_READ, readBytes, -1, buffer)
+                        //.sendToTarget();
             } catch (IOException e) {
                 break;
             }
