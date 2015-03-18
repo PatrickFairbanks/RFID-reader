@@ -20,7 +20,10 @@ static const UART_Pin_Pair btPair = { { GPIO_J, io_PJ, 2, Polar_ActiveHigh },  {
 void init()
 {
 	globalPin_set_dir(PinDir_Output, &btTx);
+	io_set_config(DEFAULT_IO_CFG, &btTx);
+	
 	globalPin_set_dir(PinDir_Input, &btRx);
+	io_set_config(DEFAULT_IO_CFG, &btRx);
 }
 
 int test = 0;
