@@ -78,31 +78,6 @@ void tDelay()
 }
 //Wireless transmission Function.
 
-int startConfig()
-{
-	//Set input and output pin directions
-	globalPin_set_dir(PinDir_Output, &MODE);
-	globalPin_set_dir(PinDir_Output, &RTB);
-	globalPin_set_dir(PinDir_Output, &DIN);
-	globalPin_set_dir(PinDir_Input, &CK);
-	globalPin_set_dir(PinDir_Input, &DOUT);
-	globalPin_set_dir(PinDir_Input, &DSYNC);
-
-	io_set_config(DEFAULT_IO_CFG, &DIN);
-	io_set_config(DEFAULT_TO_CFG, &DOUT);
-
-	//dataHigh();
-	//configMode();
-
-	//figure out how to change to majority voting mode.
-
-	//tModeDelay;
-	//configMode();
-
-	//Edit Other THings the same way
-	dataLow();
-}
-
 //Not sure if I can have a function of this type
 //If so, This function will, at first (hopefully for not long), will
 //take a command from the bluetooth device read button and will
@@ -126,24 +101,38 @@ uint16_t nfcDetecion(*detectByte){
 	if (tagResponse != 0)
 	{
 		return(tagResponse);
-	}
-	else{
+	}else{
 		return(ERROR);
 	}
 }
 
 
-
+static const UART_Pin_Pair antPair = { { GPIO_C, io_PC7, 0x8, Polar_ActiveHigh }, { GPIO_C, io_PC6, 0x7, Polar_ActiveHigh }, 0 };
 static const UART_Pin_Pair btPair = { { GPIO_J, io_PJ, 2, Polar_ActiveHigh },  { GPIO_J, io_PJ, 3 ,  Polar_ActiveHigh }, 0 };
 
 void init()
 {
-	startConfig();
 	globalPin_set_dir(PinDir_Output, &btTx);
-	io_set_config(DEFAULT_IO_CFG, &btTx);
+	io_set_config(DEFAULT_IO_CFG, io_PJ);
 	
 	globalPin_set_dir(PinDir_Input, &btRx);
-	io_set_config(DEFAULT_IO_CFG, &btRx);
+	io_set_config(DEFAULT_IO_CFG, io_PJ);
+
+	globalPin_set_dir(PinDir_Output, &DIN);
+	io_set_config(DEFAULT_IO_CFG, io_PC7);
+
+	globalPin_set_dir(PinDir_Input, &DOUT);
+	io_set_config(DEFAULT_TO_CFG, io_PC6);
+
+	globalPin_set_dir(PinDir_Output, &MODE);
+	globalPin_set_dir(PinDir_Output, &RTB);
+	globalPin_set_dir(PinDir_Input, &DSYNC);
+	globalPin_set_dir(PinDir_Input, &CK);
+
+	dataLow(); //Default - Forget if it is low or high, but based on logic, to send data DIN
+			   // Must not be set high.
+	transmitMode();
+
 }
 
 int test = 0;
@@ -190,6 +179,15 @@ int main(void)
 		else{
 			uart_write_byte('You Fucked Up Bad', &btTx);
 		}
+		//if (bluetoothCommand == 'b'){
+		//	tagResponse = nfcDetection(&bluetoothCommand);
+		//	if (tagResponse != ERROR){
+		//		uart_write_byte('Transmit Mode Active, Transmitting Data', &btTx);
+		//	}
+		//	else{
+
+		//	}
+		//}
 
 	}
 	return 0;
