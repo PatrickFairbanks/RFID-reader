@@ -11,11 +11,12 @@
 #include "time_funcs.h"
 #include "struct_aliases.h"
 #include "UART.h"
+#include "debug_strings.h"
 
 static const GlobalPin btTx =  { GPIO_J, io_PJ, 3 ,  Polar_ActiveHigh }; // J3
 static const GlobalPin btRx = { GPIO_J, io_PJ, 2, Polar_ActiveHigh }; // J2
 
-static const UART_Pin_Pair btPair = { { GPIO_J, io_PJ, 2, Polar_ActiveHigh },  { GPIO_J, io_PJ, 3 ,  Polar_ActiveHigh }, 1 };
+static const UART_Pin_Pair btPair = { { GPIO_J, io_PJ, 2, Polar_ActiveHigh },  { GPIO_J, io_PJ, 3 ,  Polar_ActiveHigh }, 9600 };
 
 void init()
 {
@@ -25,7 +26,7 @@ void init()
 	globalPin_set_dir(PinDir_Input, &btRx);
 	io_set_config(DEFAULT_IO_CFG, btRx.io_port);
 	
-	xpd_puts("Initialization Complete.\n");
+	xpd_puts(STRING_INIT_COMPLETE);
 }
 
 int main(void)
@@ -35,9 +36,12 @@ int main(void)
 	xpd_puts("Beginning Continuous Loop.\n");
 	for( int i = 0; i < 10; i++ )
 	{
+	
+		uint16_t message[] = { 'a', 'b', 'c', 'd' };
 
 		xpd_puts("Putting a byte.\n");
-		uart_write_byte('a', &btPair);
+		uart_write_byte('1', &btPair);
+		uart_write_buf(message,4,&btPair);
 		xpd_puts("Reading a byte.\n");
 		uint16_t in = uart_read_byte(&btPair);
 		xpd_puts("Echoing the value.\n");
