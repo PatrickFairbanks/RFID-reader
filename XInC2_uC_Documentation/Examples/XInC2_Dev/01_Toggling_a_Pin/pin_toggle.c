@@ -34,7 +34,9 @@ int main(void)
   while(1) {
     enum PinLogicState new_state = !old_state; /* invert the current pin status */
 	output = 0 ? output > 0 : 1;
+	xpd_puts("Test: ");
 	xpd_echo_int(new_state, XPD_Flag_UnsignedDecimal);
+	xpd_putc('\n');
     globalPin_write(new_state, &LED);
 	globalPin_write(!new_state, &NEW_LED);
     old_state = new_state;
