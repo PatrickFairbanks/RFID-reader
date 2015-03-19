@@ -5,4 +5,4 @@
 // Copyright (c) University of Alberta. All rights reserved.
 //--------------------------------------------------------------------------------------
 
-#define STRING_INIT_COMPLETE "\n**********************************\n*     INITIALIZATION COMPLETE    *\n**********************************\n\n"
+#define STRING_INIT_COMPLETE "\n\n**********************************\n*     INITIALIZATION COMPLETE    *\n**********************************\n\n"
