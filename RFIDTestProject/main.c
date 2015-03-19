@@ -15,6 +15,7 @@
 #include "WirelessThreads.h"
 
 #define ERROR 0
+#define TIMESTAMP 1
 
 static const GlobalPin btTx =  { GPIO_J, io_PJ, 3 ,  Polar_ActiveHigh }; // J3
 static const GlobalPin btRx = { GPIO_J, io_PJ, 2, Polar_ActiveHigh }; // J2
@@ -65,8 +66,14 @@ void tDelay()
 {
 	uint16_t startTime = timer_read();
 	unint16_t stopTime = 1; // must be 0.1 milliseconds
-	while (startTime < stopTime){
-		startTime = timer_read();
+	unint16_t ticks = 0;
+	while (stopTime < TIMESTAMP){
+		ticks = ticks + TIMESTAMP;
+		stopTime = timer_read() - startTime();
+		if (ticks > 10000){
+			break;
+		}
+
 	}
 }
 //Wireless transmission Function.
@@ -101,30 +108,30 @@ int startConfig()
 //take a command from the bluetooth device read button and will
 //use it to detect a tag, giving an error if not detected.
 
-//uint16_t nfcDetecion(*detectByte){
-//	
-//	uint16_t tagResponse = 0;
-//
-//	transmitMode();
-//	tDelay();
-//
-//	uart_write_byte(detectByte, &DIN);
-//	tDelay();
-//
-//	receiveMode();
-//	tDelay();
-//
-//	tagResponse = uart_read_byte(&DOUT);
-//
-//	if (tagResponse != 0)
-//	{
-//		return(tagResponse);
-//	}
-//	else{
-//		return(ERROR);
-//	}
-//}
-//
+uint16_t nfcDetecion(*detectByte){
+	
+	uint16_t tagResponse = 0;
+
+	transmitMode();
+	tDelay();
+
+	uart_write_byte(detectByte, &DIN);
+	tDelay();
+
+	receiveMode();
+	tDelay();
+
+	tagResponse = uart_read_byte(&DOUT);
+
+	if (tagResponse != 0)
+	{
+		return(tagResponse);
+	}
+	else{
+		return(ERROR);
+	}
+}
+
 
 
 static const UART_Pin_Pair btPair = { { GPIO_J, io_PJ, 2, Polar_ActiveHigh },  { GPIO_J, io_PJ, 3 ,  Polar_ActiveHigh }, 0 };
@@ -150,40 +157,40 @@ int main(void)
 
 	init();
 	
-		while(1)
-		{
-			test += 1;
-			if( test > 3)
-			{
-			uart_write_byte('a', &btpair);
+		//while(1)
+		//{
+		//	test += 1;
+		//	if( test > 3)
+		//	{
+		//	uart_write_byte('a', &btpair);
+		//
+		//	uint16_t in = uart_read_byte(&btpair);
+		//	xpd_echo_int(test, xpd_flag_signeddecimal);
+		//
+		//	test = 0;
+		//	}
+		//}
+	while (1){
 		
-			uint16_t in = uart_read_byte(&btpair);
-			xpd_echo_int(test, xpd_flag_signeddecimal);
-		
-			test = 0;
+		bluetoothCommand = uart_read_byte(&btRx);
+
+		if (bluetoothCommand == 'a'){
+
+			tagResponse = nfcDetection(&bluetoothCommand);
+
+			if (tagResponse != ERROR){
+
+				uart_write_byte('Receive Mode Active', &btTx);
 			}
+			else{
+				uart_write_byte('You Fucked Up Bad', &btTx);
+			}
+
 		}
-	//while (1){
-	//	
-	//	bluetoothCommand = uart_read_byte(&btRx);
+		else{
+			uart_write_byte('You Fucked Up Bad', &btTx);
+		}
 
-	//	if (bluetoothCommand == 'a'){
-
-	//		tagResponse = nfcDetection(&bluetoothCommand);
-
-	//		if (tagResponse != ERROR){
-
-	//			uart_write_byte('Receive Mode Active', &btTx);
-	//		}
-	//		else{
-	//			uart_write_byte('You Fucked Up Bad', &btTx);
-	//		}
-
-	//	}
-	//	else{
-	//		uart_write_byte('You Fucked Up Bad', &btTx);
-	//	}
-
-	//}
+	}
 	return 0;
 }
