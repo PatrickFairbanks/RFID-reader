@@ -39,7 +39,12 @@ void dataLow()
 {
 	globalPin_write(OFF, &DIN);
 }
-
+void ckHigh(){
+	globalPin_write(ON, &CK);
+}
+void ckLow(){
+	globalPin_write(OFF, &CK);
+}
 //Transceiver Modes
 //Switch To configuration Mode
 
@@ -88,9 +93,11 @@ uint16_t nfcDetection(uint16_t *detectByte){
 	uint16_t tagResponse = 0;
 
 	transmitMode();
+	ckHigh();
 	tDelay();
 
 	uart_write_byte(*detectByte, &antPair);
+	ckLow();
 	tDelay();
 
 	receiveMode();
@@ -104,6 +111,7 @@ uint16_t nfcDetection(uint16_t *detectByte){
 	}
 	else
 	{
+		xpd_prints('fuuuuuck');
 		return(ERROR);
 	}
 }
@@ -172,14 +180,12 @@ int main(void)
 			if (tagResponse != ERROR){
 
 				uart_write_byte('R', &btPair);
-			}
-			else{
-				uart_write_byte('Y', &btPair);
+			}else{
+				xpd_prints('son of a');
 			}
 
-		}
-		else{
-			uart_write_byte('Y', &btPair);
+		}else{
+			xpd_prints('fuuuu still');
 		}
 		//if (bluetoothCommand == 'b'){
 		//	tagResponse = nfcDetection(&bluetoothCommand);
