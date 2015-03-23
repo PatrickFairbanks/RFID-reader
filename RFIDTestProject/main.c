@@ -83,7 +83,7 @@ void tDelay()
 //take a command from the bluetooth device read button and will
 //use it to detect a tag, giving an error if not detected.
 
-uint16_t nfcDetecion(uint16_t *detectByte){
+uint16_t nfcDetection(uint16_t *detectByte){
 	
 	uint16_t tagResponse = 0;
 
@@ -124,7 +124,7 @@ void init()
 	io_set_config(DEFAULT_IO_CFG, io_PC7);
 
 	globalPin_set_dir(PinDir_Input, &DOUT);
-	io_set_config(DEFAULT_TO_CFG, io_PC6);
+	io_set_config(DEFAULT_IO_CFG, io_PC6);
 
 	globalPin_set_dir(PinDir_Output, &MODE);
 	globalPin_set_dir(PinDir_Output, &RTB);
