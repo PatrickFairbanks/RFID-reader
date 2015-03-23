@@ -34,16 +34,20 @@ static const UART_Pin_Pair btPair = { { GPIO_J, io_PJ, 2, Polar_ActiveHigh }, { 
 void dataHigh()
 {
 	globalPin_write(ON, &DIN);
+	xpd_puts("Data In High.\n");
 }
 void dataLow()
 {
 	globalPin_write(OFF, &DIN);
+	xpd_puts("Data In Low.\n");
 }
 void ckHigh(){
 	globalPin_write(ON, &CK);
+	xpd_puts("Clock High.\n");
 }
 void ckLow(){
 	globalPin_write(OFF, &CK);
+	xpd_puts("Clock Low.\n");
 }
 //Transceiver Modes
 //Switch To configuration Mode
@@ -52,19 +56,21 @@ void configMode()
 {
 	globalPin_write(OFF, &RTB);
 	globalPin_write(OFF, &MODE);
+	xpd_puts("Configuration Mode Enabled.\n");
 }
 //Switch to Receive Mode
 void receiveMode()
 {
 	globalPin_write(ON, &RTB);
 	globalPin_write(ON, &MODE);
+	xpd_puts("Reception Mode Enabled.\n");
 }
 //Switch to Transmit Mode
 void transmitMode()
 {
 	globalPin_write(OFF, &RTB);
 	globalPin_write(ON, &MODE);
-
+	xpd_puts("Transmission Mode Enabled.\n");
 }
 //Delay before reading after Powering NFC tag. Should be 100 us
 void tDelay()
@@ -111,7 +117,7 @@ uint16_t nfcDetection(uint16_t *detectByte){
 	}
 	else
 	{
-		xpd_prints('fuuuuuck');
+		xpd_puts("fuuuuuck.\n");
 		return(ERROR);
 	}
 }
@@ -181,11 +187,11 @@ int main(void)
 
 				uart_write_byte('R', &btPair);
 			}else{
-				xpd_prints('son of a');
+				xpd_puts("son of a.\n");
 			}
 
 		}else{
-			xpd_prints('fuuuu still');
+			xpd_puts("fuuuu still.\n");
 		}
 		//if (bluetoothCommand == 'b'){
 		//	tagResponse = nfcDetection(&bluetoothCommand);
