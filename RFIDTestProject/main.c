@@ -1,6 +1,6 @@
 //--------------------------------------------------------------------------------------
 // File: main.c
-// Author: Andrew Coulthard
+// Authors: Andrew Coulthard And Patrick Fairbanks
 //
 // Copyright (c) University of Alberta. All rights reserved.
 //--------------------------------------------------------------------------------------
@@ -12,7 +12,6 @@
 #include "time_funcs.h"
 #include "struct_aliases.h"
 #include "UART.h"
-#include "WirelessThreads.h"
 
 #define ERROR 0
 #define TIMESTAMP 1
@@ -28,7 +27,8 @@ static const GlobalPin CK = { GPIO_C, io_PC4, 0x5, Polar_ActiveHigh }; //C4
 static const GlobalPin MODE = { GPIO_D, io_PD2, 0x20, Polar_ActiveHigh }; //D2
 static const GlobalPin RTB = { GPIO_D, io_PD3, 0x30, Polar_ActiveHigh }; //D3
 static const size_t kMsPerCycle = 1; //Figure out how to change this to microseconds
-
+static const UART_Pin_Pair antPair = { { GPIO_C, io_PC7, 0x8, Polar_ActiveHigh }, { GPIO_C, io_PC6, 0x7, Polar_ActiveHigh }, 0 };
+static const UART_Pin_Pair btPair = { { GPIO_J, io_PJ, 2, Polar_ActiveHigh }, { GPIO_J, io_PJ, 3, Polar_ActiveHigh }, 0 };
 
 // Set the Data in pins High or Low. Just for readability
 void dataHigh()
@@ -37,7 +37,7 @@ void dataHigh()
 }
 void dataLow()
 {
-	globalPin_write(OFF, DIN);
+	globalPin_write(OFF, &DIN);
 }
 
 //Transceiver Modes
@@ -64,17 +64,17 @@ void transmitMode()
 //Delay before reading after Powering NFC tag. Should be 100 us
 void tDelay()
 {
-	uint16_t startTime = timer_read();
-	unint16_t stopTime = 1; // must be 0.1 milliseconds
-	unint16_t ticks = 0;
-	while (stopTime < TIMESTAMP){
-		ticks = ticks + TIMESTAMP;
-		stopTime = timer_read() - startTime();
-		if (ticks > 10000){
-			break;
-		}
+	//uint16_t startTime = timer_read();
+	//uint16_t stopTime = 1; // must be 0.1 milliseconds
+	//uint16_t ticks = 0;
+	//while (stopTime < TIMESTAMP){
+	//	ticks = ticks + TIMESTAMP;
+	//	stopTime = timer_read() - startTime();
+	//	if (ticks > 10000){
+	//		break;
+	//	}
 
-	}
+	//}
 }
 //Wireless transmission Function.
 
@@ -83,32 +83,34 @@ void tDelay()
 //take a command from the bluetooth device read button and will
 //use it to detect a tag, giving an error if not detected.
 
-uint16_t nfcDetecion(*detectByte){
+uint16_t nfcDetecion(uint16_t *detectByte){
 	
 	uint16_t tagResponse = 0;
 
 	transmitMode();
 	tDelay();
 
-	uart_write_byte(detectByte, &DIN);
+	uart_write_byte(*detectByte, &antPair);
 	tDelay();
 
 	receiveMode();
 	tDelay();
 
-	tagResponse = uart_read_byte(&DOUT);
+	tagResponse = uart_read_byte(&antPair);
 
 	if (tagResponse != 0)
 	{
 		return(tagResponse);
-	}else{
+	}
+	else
+	{
 		return(ERROR);
 	}
 }
 
 
-static const UART_Pin_Pair antPair = { { GPIO_C, io_PC7, 0x8, Polar_ActiveHigh }, { GPIO_C, io_PC6, 0x7, Polar_ActiveHigh }, 0 };
-static const UART_Pin_Pair btPair = { { GPIO_J, io_PJ, 2, Polar_ActiveHigh },  { GPIO_J, io_PJ, 3 ,  Polar_ActiveHigh }, 0 };
+//static const UART_Pin_Pair antPair = { { GPIO_C, io_PC7, 0x8, Polar_ActiveHigh }, { GPIO_C, io_PC6, 0x7, Polar_ActiveHigh }, 0 };
+//static const UART_Pin_Pair btPair = { { GPIO_J, io_PJ, 2, Polar_ActiveHigh },  { GPIO_J, io_PJ, 3 ,  Polar_ActiveHigh }, 0 };
 
 void init()
 {
@@ -161,7 +163,7 @@ int main(void)
 		//}
 	while (1){
 		
-		bluetoothCommand = uart_read_byte(&btRx);
+		bluetoothCommand = uart_read_byte(&btPair);
 
 		if (bluetoothCommand == 'a'){
 
@@ -169,15 +171,15 @@ int main(void)
 
 			if (tagResponse != ERROR){
 
-				uart_write_byte('Receive Mode Active', &btTx);
+				uart_write_byte('R', &btPair);
 			}
 			else{
-				uart_write_byte('You Fucked Up Bad', &btTx);
+				uart_write_byte('Y', &btPair);
 			}
 
 		}
 		else{
-			uart_write_byte('You Fucked Up Bad', &btTx);
+			uart_write_byte('Y', &btPair);
 		}
 		//if (bluetoothCommand == 'b'){
 		//	tagResponse = nfcDetection(&bluetoothCommand);
