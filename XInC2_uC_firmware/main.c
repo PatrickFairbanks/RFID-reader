@@ -17,7 +17,7 @@
 static const GlobalPin btTx =  { GPIO_J, io_PJ, 0x8 ,  Polar_ActiveHigh }; // J3
 static const GlobalPin btRx = { GPIO_J, io_PJ, 0x4 , Polar_ActiveHigh }; // J2
 
-static const UART_Pin_Pair btPair = { { GPIO_J, io_PJ, 2, Polar_ActiveHigh },  { GPIO_J, io_PJ, 3 ,  Polar_ActiveHigh }, 9600 };
+static const UART_Pin_Pair btPair = { { GPIO_J, io_PJ, 2, Polar_ActiveHigh },  { GPIO_J, io_PJ, 3 ,  Polar_ActiveHigh }, kSystemF/9600 };
 
 InputStream btStream;
 
@@ -39,7 +39,7 @@ int main(void)
 {
 	init();
 	
-	
+	/*
 	while(1)
 	{
 		xpd_puts("Writing 0\n");
@@ -49,7 +49,7 @@ int main(void)
 		globalPin_write(1, &btTx);
 		wait_ms(1000);
 	}
-	
+	*/
 	// Old Loop to test bluetooth functionality
 	xpd_puts("Beginning Continuous Loop.\n");
 	while(1)
@@ -71,6 +71,9 @@ int main(void)
 	{
 		char in = uart_read_byte(&btPair);
 		IS_Insert( in , &btStream );
+		
+		char str[2] = { in, 0 };
+		xpd_puts(str);
 		
 		// upon string completion, check for a command
 		// if a command is found, perform the action
