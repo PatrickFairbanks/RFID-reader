@@ -14,21 +14,21 @@
 #include "string_defines.h"
 #include "InputStream.h"
 
-static const GlobalPin btTx =  { GPIO_J, io_PJ, 0x8 ,  Polar_ActiveHigh }; // J3
-static const GlobalPin btRx = { GPIO_J, io_PJ, 0x4 , Polar_ActiveHigh }; // J2
+#define btRx { GPIO_J, io_PJ, 0x8 , Polar_ActiveHigh } // J3
+#define btTx { GPIO_J, io_PJ, 0x4 , Polar_ActiveHigh } // J2
 
-static const UART_Pin_Pair btPair = { { GPIO_J, io_PJ, 2, Polar_ActiveHigh },  { GPIO_J, io_PJ, 3 ,  Polar_ActiveHigh }, kSystemF/9600 };
+static const UART_Pin_Pair btPair = { btRx, btTx , kSystemF/115200 };
 
 InputStream btStream;
 
 void init()
 {
 
-	globalPin_set_dir(PinDir_Output, &btTx);
-	io_set_config(DEFAULT_IO_CFG, btTx.io_port);
+	globalPin_set_dir(PinDir_Output, &btPair.tx);
+	io_set_config(DEFAULT_IO_CFG, btPair.tx.io_port);
 	
-	globalPin_set_dir(PinDir_Input, &btRx);
-	io_set_config(DEFAULT_IO_CFG, btRx.io_port);
+	globalPin_set_dir(PinDir_Input, &btPair.rx);
+	io_set_config(DEFAULT_IO_CFG, btPair.rx.io_port);
 	
 	IS_Init(&btStream);
 	
@@ -39,7 +39,8 @@ int main(void)
 {
 	init();
 	
-	/*
+	// Code to test GlobalPin declarations
+	/* 
 	while(1)
 	{
 		xpd_puts("Writing 0\n");
@@ -54,16 +55,18 @@ int main(void)
 	xpd_puts("Beginning Continuous Loop.\n");
 	while(1)
 	{	
-		char message[] = "abcd";
+
 		
-		xpd_puts("Putting a byte.\n");
-		uart_write_byte('1', &btPair);
-		uart_write_str(message,&btPair);
+		xpd_puts("Putting some bytes.\n");
+		for( char c = 'a'; c <= 'z'; c++)
+		{
+			uart_write_byte(c, &btPair);
+		}
 		xpd_puts("Reading a byte.\n");
 		uint16_t in = uart_read_byte(&btPair);
 		xpd_puts("Echoing the value.\n");
-		xpd_echo_int(in, XPD_Flag_SignedDecimal);
-
+		xpd_putc(in);
+		xpd_puts("\n");
 	}
 	
 	// New Loop to actually parse the data from the app
