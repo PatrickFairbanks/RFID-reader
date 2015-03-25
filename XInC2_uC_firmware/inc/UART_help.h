@@ -11,10 +11,9 @@
 *  Uart buffer. It assumes that you have a standard null-
 *  terminated C-style string.
 */
-void uart_write_str(char* str, UART_Pin_Pair const * pinPair)
+void uart_write_str(char* str, int len, UART_Pin_Pair const * pinPair)
 {
-	int i = 0;
-	while( str[i] != 0 )
+	for(int i = 0; i < len; i++)
 	{
 		uint16_t input = str[i];
 		uart_write_byte(input, pinPair);

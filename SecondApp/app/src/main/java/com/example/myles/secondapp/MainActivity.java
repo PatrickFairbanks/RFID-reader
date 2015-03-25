@@ -43,12 +43,12 @@ public class MainActivity extends ActionBarActivity {
     CharSequence swapped = "Swapped";
     CharSequence BlueToothAlreadyOn = "Bluetooth Already On";
     int duration = Toast.LENGTH_SHORT;
-    byte[] DelA_ByteArray = "dea".getBytes();
-    byte[] DelB_ByteArray = "deb".getBytes();
-    byte[] ConA_ByteArray = "coa".getBytes();
-    byte[] ConB_ByteArray = "cob".getBytes();
-    byte[] Swap_ByteArray = "swa".getBytes();
-    byte[] Ref_ByteArray = "ref".getBytes();
+    byte[] DelA_ByteArray = "dea\n".getBytes();
+    byte[] DelB_ByteArray = "deb\n".getBytes();
+    byte[] ConA_ByteArray = "coa\n".getBytes();
+    byte[] ConB_ByteArray = "cob\n".getBytes();
+    byte[] Swap_ByteArray = "swa\n".getBytes();
+    byte[] Ref_ByteArray = "ref\n".getBytes();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,21 +73,23 @@ public class MainActivity extends ActionBarActivity {
             Toast toast = Toast.makeText(context, "No Bluetooth Device Detected", duration);
             toast.show();
         }
+        while(myThread == null) {
+            Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
+            boolean bluetoothExists = false;
+            for (BluetoothDevice device : pairedDevices) {
 
-        Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
-        boolean bluetoothExists = false;
-        for(BluetoothDevice device : pairedDevices)
-        {
+                String name = device.getName();
+                if ( name.contains("RFID") ) {
+                    rnBoard = device;
+                    bluetoothExists = true;
+                }
 
-            String name = device.getName();
-            if( name.contains("RFID") ) {
-                rnBoard = device;
-                bluetoothExists = true;
             }
-
+            if (bluetoothExists) {
+                myThread = new ConnectThread(rnBoard);
+                Toast.makeText(getApplicationContext(), "Paired with RFID reader", duration).show();
+            }
         }
-        if(bluetoothExists)
-            myThread = new ConnectThread(rnBoard);
     }
 
     //Function called when refresh button is pressed
@@ -214,8 +216,6 @@ public class MainActivity extends ActionBarActivity {
         mminStream = tmpIn;
         mmoutStream = tmpOut;
     }
-
-    byte[] arr = 'd';
 
     public void inStreamListen(){
         byte[] buffer = new byte[1024];  // buffer store for the stream

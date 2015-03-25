@@ -7,6 +7,8 @@
 // Copyright (c) University of Alberta. All rights reserved.
 //--------------------------------------------------------------------------------------
 
+#define STR_TERMINAL '\n'
+
 typedef struct InputStream
 {
 	char stream[100]; 
@@ -62,7 +64,7 @@ int IS_ContainsString(char* search, InputStream* iStream)
 	int i = 0;
 	while( 1 )
 	{
-		if( search[i] == 0 && iStream->stream[i] == 0 )
+		if( search[i] == STR_TERMINAL && iStream->stream[i] == STR_TERMINAL )
 			return 1;
 		if( search[i] != iStream->stream[i] )
 			break;

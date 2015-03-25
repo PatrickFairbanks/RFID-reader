@@ -9,9 +9,9 @@
 #define STRING_INIT_COMPLETE "\n\n**********************************\n*     INITIALIZATION COMPLETE    *\n**********************************\n\n"
 
 // BLUETOOTH COMMUNICATION FROM APP
-#define DELETE_A "DEA"
-#define DELETE_B "DEB"
-#define CONSOL_A "COA"
-#define CONSOL_B "COB"
-#define SWAP	 "SWA"
-#define REFRESH  "REF"
+#define DELETE_A "dea\n"
+#define DELETE_B "deb\n"
+#define CONSOL_A "coa\n"
+#define CONSOL_B "cob\n"
+#define SWAP	 "swa\n"
+#define REFRESH  "ref\n"
