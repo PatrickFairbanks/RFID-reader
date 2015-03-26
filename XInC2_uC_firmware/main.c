@@ -52,42 +52,38 @@ int main(void)
 			{
 				xpd_puts("Deleting A\n");
 				// DELETE A ACTION
-				uart_write_str(DELETE_A,4,&btPair);
 				xpd_puts("A Has Been Deleted.");
 			}
 			else if( IS_ContainsString(DELETE_B, &btStream) )
 			{
 				xpd_puts("Deleting B\n");
 				// DELETE B ACTION
-				uart_write_str(DELETE_B,4,&btPair);
 				xpd_puts("B Has Been Deleted.");
 			}
 			else if( IS_ContainsString(CONSOL_A, &btStream) )
 			{
 				xpd_puts("Consolidating A\n");
 				// CONSOLIDATE A ACTION
-				uart_write_str(CONSOL_A,4,&btPair);
 				xpd_puts("Consolidated to A.\n");
 			}
 			else if( IS_ContainsString(CONSOL_B, &btStream) )
 			{
 				xpd_puts("Consolidating B\n");
 				// CONSOLIDATE B ACTION
-				uart_write_str(CONSOL_B,4,&btPair);
 				xpd_puts("Consolidated to B.\n");
 			}
 			else if( IS_ContainsString(SWAP, &btStream) )
 			{
 				xpd_puts("Swapping\n");
 				// SWAP ACTION
-				uart_write_str(SWAP,4,&btPair);
 				xpd_puts("Swap complete.\n");
 			}
 			else if( IS_ContainsString(REFRESH, &btStream) )
 			{
 				xpd_puts("Refreshing\n");
 				// REFRESH ACTION
-				uart_write_str(REFRESH,4,&btPair);
+						uart_write_str("da1\n", 4, &btPair);
+						uart_write_str("db3\n", 4, &btPair);
 				xpd_puts("Refresh complete.\n");
 			}
 			

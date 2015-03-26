@@ -1,6 +1,6 @@
 //--------------------------------------------------------------------------------------
 // File: main.c
-// Authors: Andrew Coulthard And Patrick Fairbanks
+// Authors: Patrick Fairbanks
 //
 // Copyright (c) University of Alberta. All rights reserved.
 //--------------------------------------------------------------------------------------
@@ -15,22 +15,30 @@
 
 #define ERROR 0
 #define TIMESTAMP 1
+#define configSize 12
+static const periodTicks = 49152000 / 106000;
 
-static const GlobalPin btTx =  { GPIO_J, io_PJ, 3 ,  Polar_ActiveHigh }; // J3
-static const GlobalPin btRx = { GPIO_J, io_PJ, 2, Polar_ActiveHigh }; // J2
+static const GlobalPin btTx =  { GPIO_J, io_PJ, 1<<3,  Polar_ActiveHigh }; // J3
+static const GlobalPin btRx = { GPIO_J, io_PJ, 1<<2, Polar_ActiveHigh }; // J2
 
 //Pin Declarations
-static const GlobalPin DIN = { GPIO_C, io_PC7, 0x8, Polar_ActiveHigh }; //C7
-static const GlobalPin DOUT = { GPIO_C, io_PC6, 0x7, Polar_ActiveHigh }; //C6
-static const GlobalPin DSYNC = { GPIO_C, io_PC5, 0x6, Polar_ActiveHigh }; //C5
-static const GlobalPin CK = { GPIO_C, io_PC4, 0x5, Polar_ActiveHigh }; //C4
-static const GlobalPin MODE = { GPIO_D, io_PD2, 0x20, Polar_ActiveHigh }; //D2
-static const GlobalPin RTB = { GPIO_D, io_PD3, 0x30, Polar_ActiveHigh }; //D3
-static const size_t kMsPerCycle = 1; //Figure out how to change this to microseconds
+
+static const GlobalPin DIN = { GPIO_C, io_PC7, 1<<7, Polar_ActiveHigh }; //C7
+static const GlobalPin DOUT = { GPIO_C, io_PC6, 1<<6, Polar_ActiveHigh }; //C6
+static const GlobalPin DSYNC = { GPIO_C, io_PC5, 1<<5, Polar_ActiveHigh }; //C5
+static const GlobalPin CK = { GPIO_C, io_PC4, 1<<4, Polar_ActiveHigh }; //C4
+static const GlobalPin MODE = { GPIO_D, io_PD2, 1<<2, Polar_ActiveHigh }; //D2
+static const GlobalPin RTB = { GPIO_D, io_PD3, 1<<3, Polar_ActiveHigh }; //D3
 static const UART_Pin_Pair antPair = { { GPIO_C, io_PC7, 0x8, Polar_ActiveHigh }, { GPIO_C, io_PC6, 0x7, Polar_ActiveHigh }, 0 };
 static const UART_Pin_Pair btPair = { { GPIO_J, io_PJ, 2, Polar_ActiveHigh }, { GPIO_J, io_PJ, 3, Polar_ActiveHigh }, 0 };
 
-// Set the Data in pins High or Low. Just for readability
+//Edit this function for reception timing
+
+bool detectDSYNC()
+{
+	
+}
+
 void dataHigh()
 {
 	globalPin_write(ON, &DIN);
@@ -41,14 +49,17 @@ void dataLow()
 	globalPin_write(OFF, &DIN);
 	xpd_puts("Data In Low.\n");
 }
-void ckHigh(){
+void ckHigh()
+{
 	globalPin_write(ON, &CK);
 	xpd_puts("Clock High.\n");
 }
-void ckLow(){
+void ckLow()
+{
 	globalPin_write(OFF, &CK);
 	xpd_puts("Clock Low.\n");
 }
+
 //Transceiver Modes
 //Switch To configuration Mode
 
@@ -58,41 +69,71 @@ void configMode()
 	globalPin_write(OFF, &MODE);
 	xpd_puts("Configuration Mode Enabled.\n");
 }
+
 //Switch to Receive Mode
+
 void receiveMode()
 {
 	globalPin_write(ON, &RTB);
 	globalPin_write(ON, &MODE);
+	globalPin_write(ON, &DIN);
+	globalPin_write(OFF, &CK);
 	xpd_puts("Reception Mode Enabled.\n");
 }
+
 //Switch to Transmit Mode
+
 void transmitMode()
 {
 	globalPin_write(OFF, &RTB);
 	globalPin_write(ON, &MODE);
 	xpd_puts("Transmission Mode Enabled.\n");
 }
+
+//global write function. The bitShift is what decides whether the data
+//is being written to config the transceiver or send to the transponder.
+
+void globalWriteTx(int Address, int Data, int bitShift)
+{
+	configMode();
+	Address = Address << 12;
+	
+	for (i = 3; i >= 0; i--)
+	{
+		ckLow();
+		globalPin_write(Address << &1, &DIN);
+		sys_clock_wait(periodTicks / 2);
+		ckHigh();
+		sys_clock_wait(periodTicks / 2);
+	}
+}
+
+void transmitInit()
+{
+	ckLow();
+	wait;
+	ckHigh();
+	wait
+	ckLow();
+	wait;
+	ckHigh();
+	wait;
+	ckLow();
+	wait;
+	ckHigh();
+	wait;
+}
+
+
 //Delay before reading after Powering NFC tag. Should be 100 us
+
 void tDelay()
 {
-	//uint16_t startTime = timer_read();
-	//uint16_t stopTime = 1; // must be 0.1 milliseconds
-	//uint16_t ticks = 0;
-	//while (stopTime < TIMESTAMP){
-	//	ticks = ticks + TIMESTAMP;
-	//	stopTime = timer_read() - startTime();
-	//	if (ticks > 10000){
-	//		break;
-	//	}
-
-	//}
+	sys_clock_wait(41952000 / 10000);
 }
-//Wireless transmission Function.
 
-//Not sure if I can have a function of this type
-//If so, This function will, at first (hopefully for not long), will
-//take a command from the bluetooth device read button and will
-//use it to detect a tag, giving an error if not detected.
+//this function is used to detect a tag.
+//EDIT USING THE isoWRITE();
 
 uint16_t nfcDetection(uint16_t *detectByte){
 	
@@ -100,7 +141,6 @@ uint16_t nfcDetection(uint16_t *detectByte){
 
 	transmitMode();
 	ckHigh();
-	tDelay();
 
 	uart_write_byte(*detectByte, &antPair);
 	ckLow();
@@ -122,12 +162,9 @@ uint16_t nfcDetection(uint16_t *detectByte){
 	}
 }
 
-
-//static const UART_Pin_Pair antPair = { { GPIO_C, io_PC7, 0x8, Polar_ActiveHigh }, { GPIO_C, io_PC6, 0x7, Polar_ActiveHigh }, 0 };
-//static const UART_Pin_Pair btPair = { { GPIO_J, io_PJ, 2, Polar_ActiveHigh },  { GPIO_J, io_PJ, 3 ,  Polar_ActiveHigh }, 0 };
-
 void init()
 {
+	init_clock();
 	globalPin_set_dir(PinDir_Output, &btTx);
 	io_set_config(DEFAULT_IO_CFG, io_PJ);
 	
@@ -161,20 +198,7 @@ int main(void)
 	uint16_t tagResponse = 0;
 
 	init();
-	
-		//while(1)
-		//{
-		//	test += 1;
-		//	if( test > 3)
-		//	{
-		//	uart_write_byte('a', &btpair);
-		//
-		//	uint16_t in = uart_read_byte(&btpair);
-		//	xpd_echo_int(test, xpd_flag_signeddecimal);
-		//
-		//	test = 0;
-		//	}
-		//}
+
 	while (1){
 		
 		bluetoothCommand = uart_read_byte(&btPair);
