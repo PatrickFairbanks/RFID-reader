@@ -16,8 +16,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.Vector;
 
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -30,9 +32,6 @@ public class MainActivity extends ActionBarActivity {
 
     ConnectThread myThread;
 
-    private BluetoothSocket mmSocket;
-    private OutputStream mmoutStream;
-    private InputStream mminStream;
     BluetoothAdapter mBluetoothAdapter;
     private BluetoothDevice rnBoard;
     CharSequence REFRESH = "Refreshed!";
@@ -87,15 +86,15 @@ public class MainActivity extends ActionBarActivity {
             }
             if (bluetoothExists) {
                 myThread = new ConnectThread(rnBoard);
+                myThread.start();
                 Toast.makeText(getApplicationContext(), "Paired with RFID reader", duration).show();
-                myThread.inStreamListen();
             }
         }
     }
 
     //Function called when refresh button is pressed
     public void refresh(View view) {
-        write(Ref_ByteArray);
+        myThread.write(Ref_ByteArray);
         Context context = getApplicationContext();
 
         Toast toast = Toast.makeText(context, REFRESH, duration);
@@ -104,7 +103,7 @@ public class MainActivity extends ActionBarActivity {
 
     //Function called when delete A button is pressed
     public void deleteA(View view) {
-        write(DelA_ByteArray);
+        myThread.write(DelA_ByteArray);
         Context context = getApplicationContext();
         Toast toast = Toast.makeText(context, delA, duration);
         toast.show();
@@ -112,7 +111,7 @@ public class MainActivity extends ActionBarActivity {
 
     //Function called when delete B button is pressed
     public void deleteB(View view) {
-        write(DelB_ByteArray);
+        myThread.write(DelB_ByteArray);
         Context context = getApplicationContext();
         Toast toast = Toast.makeText(context, delB, duration);
         toast.show();
@@ -120,21 +119,21 @@ public class MainActivity extends ActionBarActivity {
 
     //Function called when delete B button is pressed
     public void conA(View view) {
-        write(ConA_ByteArray);
+        myThread.write(ConA_ByteArray);
         Context context = getApplicationContext();
         Toast toast = Toast.makeText(context, consA, duration);
         toast.show();
     }
 
     public void conB(View view) {
-        write(ConB_ByteArray);
+        myThread.write(ConB_ByteArray);
         Context context = getApplicationContext();
         Toast toast = Toast.makeText(context, consB, duration);
         toast.show();
     }
 
     public void swap(View view) {
-        write(Swap_ByteArray);
+        myThread.write(Swap_ByteArray);
         Context context = getApplicationContext();
         Toast toast = Toast.makeText(context, swapped, duration);
         toast.show();
@@ -163,9 +162,14 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private class ConnectThread extends Thread {
-        private final BluetoothSocket mmSocket;
+
+        private OutputStream mmoutStream;
+        private InputStream mminStream;
+        private  BluetoothSocket mmSocket;
         private final BluetoothDevice mmDevice;
         public UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+
+        List<Character> bits_received = new ArrayList<Character>();
 
         public ConnectThread(BluetoothDevice device) {
             // Use a temporary object that is later assigned to mmSocket,
@@ -180,7 +184,6 @@ public class MainActivity extends ActionBarActivity {
             } catch (IOException e) {
             }
             mmSocket = tmp;
-            run();
         }
         public void run() {
             // Cancel discovery because it will slow down the connection
@@ -202,6 +205,24 @@ public class MainActivity extends ActionBarActivity {
             manageConnectedSocket(mmSocket);
         }
 
+        private void manageConnectedSocket(BluetoothSocket socket)
+        {
+            mmSocket = socket;
+            InputStream tmpIn = null;
+            OutputStream tmpOut = null;
+            // Some garbage with the socket.
+
+            try {
+                tmpIn = socket.getInputStream();
+                tmpOut = socket.getOutputStream();
+            } catch (IOException e) { }
+
+            mminStream = tmpIn;
+            mmoutStream = tmpOut;
+
+            inStreamListen();
+        }
+
         public void inStreamListen(){
             byte[] buffer = new byte[1024];  // buffer store for the stream
             int readBytes;  // bytes read from input stream/from read
@@ -211,17 +232,20 @@ public class MainActivity extends ActionBarActivity {
                     // Read from the InputStream
                     readBytes = mminStream.read(buffer);
                     // parse data from buffer
+
                     int data_a, data_b;
-                    char[] char_arr = new char[readBytes];
 
                     for(int i = 0; i < readBytes; i++)
                     {
-                        char_arr[i] = (char)buffer[i];
+                        char charRead = (char)buffer[i];
+                        bits_received.add(charRead);
                     }
 
-                    if(readBytes == 8 && char_arr[0] == 'd' && char_arr[4] == 'd') {
-                        data_a = (int)char_arr[2];
-                        data_b = (int)char_arr[6];
+                    if(readBytes == 0) break;
+
+                    if(bits_received.size() == 8 && bits_received.get(0) == 'd' && bits_received.get(4) == 'd') {
+                        data_a = (int)bits_received.get(2);
+                        data_b = (int)bits_received.get(6);
                     }
                     // Send the obtained bytes to the UI activity
                     //mHandler.obtainMessage(MESSAGE_READ, readBytes, -1, buffer)
@@ -232,35 +256,17 @@ public class MainActivity extends ActionBarActivity {
                 }
             }
         }
-    }
 
-    private void manageConnectedSocket(BluetoothSocket socket)
-    {
-        mmSocket = socket;
-        InputStream tmpIn = null;
-        OutputStream tmpOut = null;
-        // Some garbage with the socket.
+        public void write(byte[] bytes) {
+            try {
+                mmoutStream.write(bytes);
+            } catch (IOException e) { }
+        }
 
-        try {
-            tmpIn = socket.getInputStream();
-            tmpOut = socket.getOutputStream();
-        } catch (IOException e) { }
-
-        mminStream = tmpIn;
-        mmoutStream = tmpOut;
-    }
-
-
-
-    public void write(byte[] bytes) {
-        try {
-            mmoutStream.write(bytes);
-        } catch (IOException e) { }
-    }
-
-    public void cancel() {
-        try {
-            mmSocket.close();
-        } catch (IOException e) { }
+        public void cancel() {
+            try {
+                mmSocket.close();
+            } catch (IOException e) { }
+        }
     }
 }
