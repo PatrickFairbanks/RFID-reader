@@ -92,10 +92,3 @@ int main(void)
 	}
 	return 0;
 }
-
-1000
-
-bool bit_n(int n)
-{
-
-}
