@@ -15,6 +15,7 @@
 
 #define ERROR 0
 #define TIMESTAMP 1
+#define configSize 12
 
 static const GlobalPin btTx =  { GPIO_J, io_PJ, 3 ,  Polar_ActiveHigh }; // J3
 static const GlobalPin btRx = { GPIO_J, io_PJ, 2, Polar_ActiveHigh }; // J2
@@ -31,6 +32,39 @@ static const UART_Pin_Pair antPair = { { GPIO_C, io_PC7, 0x8, Polar_ActiveHigh }
 static const UART_Pin_Pair btPair = { { GPIO_J, io_PJ, 2, Polar_ActiveHigh }, { GPIO_J, io_PJ, 3, Polar_ActiveHigh }, 0 };
 
 // Set the Data in pins High or Low. Just for readability
+bool detectDSYNC()
+{
+	
+}
+void writeISOConfig(int Address, int Data){
+	configMode();
+	Address = Address << 12;
+	for (i = 3; i >= 0; i--)
+	{
+		ckLow();
+		globalPin_write(Address << &1, &DIN);
+		wait(ticks);
+		ckHigh();
+		wait(ticks);
+	}
+
+
+}
+void transmitInit()
+{
+	ckLow();
+	wait;
+	ckHigh();
+	wait
+	ckLow();
+	wait;
+	ckHigh();
+	wait;
+	ckLow();
+	wait;
+	ckHigh();
+	wait;
+}
 void dataHigh()
 {
 	globalPin_write(ON, &DIN);
@@ -63,6 +97,8 @@ void receiveMode()
 {
 	globalPin_write(ON, &RTB);
 	globalPin_write(ON, &MODE);
+	globalPin_write(ON, &DIN);
+	globalPin_write(OFF, &CK);
 	xpd_puts("Reception Mode Enabled.\n");
 }
 //Switch to Transmit Mode
@@ -72,6 +108,16 @@ void transmitMode()
 	globalPin_write(ON, &MODE);
 	xpd_puts("Transmission Mode Enabled.\n");
 }
+
+void writeISOConfig(){
+	configMode();
+	ckHigh();
+	
+
+
+}
+
+
 //Delay before reading after Powering NFC tag. Should be 100 us
 void tDelay()
 {
@@ -87,12 +133,8 @@ void tDelay()
 
 	//}
 }
-//Wireless transmission Function.
 
-//Not sure if I can have a function of this type
-//If so, This function will, at first (hopefully for not long), will
-//take a command from the bluetooth device read button and will
-//use it to detect a tag, giving an error if not detected.
+//this function is used to detect a tag.
 
 uint16_t nfcDetection(uint16_t *detectByte){
 	
@@ -100,7 +142,6 @@ uint16_t nfcDetection(uint16_t *detectByte){
 
 	transmitMode();
 	ckHigh();
-	tDelay();
 
 	uart_write_byte(*detectByte, &antPair);
 	ckLow();
