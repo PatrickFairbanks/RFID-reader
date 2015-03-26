@@ -96,6 +96,9 @@ public class MainActivity extends ActionBarActivity {
     public void refresh(View view) {
         write(Ref_ByteArray);
         Context context = getApplicationContext();
+
+        inStreamListen();
+
         Toast toast = Toast.makeText(context, REFRESH, duration);
         toast.show();
     }
@@ -225,6 +228,19 @@ public class MainActivity extends ActionBarActivity {
             try {
                 // Read from the InputStream
                 readBytes = mminStream.read(buffer);
+                // parse data from buffer
+                int data_a, data_b;
+                char[] char_arr = new char[readBytes];
+
+                for(int i = 0; i < readBytes; i++)
+                {
+                    char_arr[i] = (char)buffer[i];
+                }
+
+                if(readBytes == 8 && char_arr[0] == 'd' && char_arr[4] == 'd') {
+                    data_a = (int)char_arr[2];
+                    data_b = (int)char_arr[6];
+                }
                 // Send the obtained bytes to the UI activity
                 //mHandler.obtainMessage(MESSAGE_READ, readBytes, -1, buffer)
                         //.sendToTarget();
