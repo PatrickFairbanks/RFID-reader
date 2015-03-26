@@ -82,8 +82,8 @@ int main(void)
 			{
 				xpd_puts("Refreshing\n");
 				// REFRESH ACTION
-						uart_write_str("da1\n", 4, &btPair);
-						uart_write_str("db3\n", 4, &btPair);
+						uart_write_str("da'\n", 4, &btPair);
+						uart_write_str("db+\n", 4, &btPair);
 				xpd_puts("Refresh complete.\n");
 			}
 			
