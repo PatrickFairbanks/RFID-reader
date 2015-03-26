@@ -88,6 +88,7 @@ public class MainActivity extends ActionBarActivity {
             if (bluetoothExists) {
                 myThread = new ConnectThread(rnBoard);
                 Toast.makeText(getApplicationContext(), "Paired with RFID reader", duration).show();
+                myThread.inStreamListen();
             }
         }
     }
@@ -96,8 +97,6 @@ public class MainActivity extends ActionBarActivity {
     public void refresh(View view) {
         write(Ref_ByteArray);
         Context context = getApplicationContext();
-
-        inStreamListen();
 
         Toast toast = Toast.makeText(context, REFRESH, duration);
         toast.show();
@@ -202,6 +201,37 @@ public class MainActivity extends ActionBarActivity {
             // Do work to manage the connection (in a separate thread)
             manageConnectedSocket(mmSocket);
         }
+
+        public void inStreamListen(){
+            byte[] buffer = new byte[1024];  // buffer store for the stream
+            int readBytes;  // bytes read from input stream/from read
+
+            while (true) {
+                try {
+                    // Read from the InputStream
+                    readBytes = mminStream.read(buffer);
+                    // parse data from buffer
+                    int data_a, data_b;
+                    char[] char_arr = new char[readBytes];
+
+                    for(int i = 0; i < readBytes; i++)
+                    {
+                        char_arr[i] = (char)buffer[i];
+                    }
+
+                    if(readBytes == 8 && char_arr[0] == 'd' && char_arr[4] == 'd') {
+                        data_a = (int)char_arr[2];
+                        data_b = (int)char_arr[6];
+                    }
+                    // Send the obtained bytes to the UI activity
+                    //mHandler.obtainMessage(MESSAGE_READ, readBytes, -1, buffer)
+                    //.sendToTarget();
+                }
+                catch (IOException e) {
+                    break;
+                }
+            }
+        }
     }
 
     private void manageConnectedSocket(BluetoothSocket socket)
@@ -220,35 +250,7 @@ public class MainActivity extends ActionBarActivity {
         mmoutStream = tmpOut;
     }
 
-    public void inStreamListen(){
-        byte[] buffer = new byte[1024];  // buffer store for the stream
-        int readBytes;  // bytes read from input stream/from read
 
-        while (true) {
-            try {
-                // Read from the InputStream
-                readBytes = mminStream.read(buffer);
-                // parse data from buffer
-                int data_a, data_b;
-                char[] char_arr = new char[readBytes];
-
-                for(int i = 0; i < readBytes; i++)
-                {
-                    char_arr[i] = (char)buffer[i];
-                }
-
-                if(readBytes == 8 && char_arr[0] == 'd' && char_arr[4] == 'd') {
-                    data_a = (int)char_arr[2];
-                    data_b = (int)char_arr[6];
-                }
-                // Send the obtained bytes to the UI activity
-                //mHandler.obtainMessage(MESSAGE_READ, readBytes, -1, buffer)
-                        //.sendToTarget();
-            } catch (IOException e) {
-                break;
-            }
-        }
-    }
 
     public void write(byte[] bytes) {
         try {
