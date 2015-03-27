@@ -1,5 +1,7 @@
 package com.example.myles.secondapp;
 
+import android.os.Looper;
+import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -23,9 +25,11 @@ import java.util.Vector;
 
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -48,6 +52,8 @@ public class MainActivity extends ActionBarActivity {
     byte[] ConB_ByteArray = "cob\n".getBytes();
     byte[] Swap_ByteArray = "swa\n".getBytes();
     byte[] Ref_ByteArray = "ref\n".getBytes();
+
+    Integer tag_a = 0, tag_b = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +102,13 @@ public class MainActivity extends ActionBarActivity {
     public void refresh(View view) {
         myThread.write(Ref_ByteArray);
         Context context = getApplicationContext();
+
+        TextView aText = (TextView)findViewById(R.id.TextViewA);
+        aText.setText(tag_a.toString());
+
+        TextView bText = (TextView)findViewById(R.id.TextViewB);
+        bText.setText(tag_b.toString());
+
 
         Toast toast = Toast.makeText(context, REFRESH, duration);
         toast.show();
@@ -161,6 +174,14 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg){
+            tag_a = myThread.data_a;
+            tag_b = myThread.data_b;
+        }
+    };
+
     private class ConnectThread extends Thread {
 
         private OutputStream mmoutStream;
@@ -170,6 +191,7 @@ public class MainActivity extends ActionBarActivity {
         public UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
         List<Character> bits_received = new ArrayList<Character>();
+        int data_a, data_b;
 
         public ConnectThread(BluetoothDevice device) {
             // Use a temporary object that is later assigned to mmSocket,
@@ -233,8 +255,6 @@ public class MainActivity extends ActionBarActivity {
                     readBytes = mminStream.read(buffer);
                     // parse data from buffer
 
-                    int data_a, data_b;
-
                     for(int i = 0; i < readBytes; i++)
                     {
                         char charRead = (char)buffer[i];
@@ -243,13 +263,14 @@ public class MainActivity extends ActionBarActivity {
 
                     if(readBytes == 0) break;
 
-                    if(bits_received.size() == 8 && bits_received.get(0) == 'd' && bits_received.get(4) == 'd') {
+                    if(bits_received.size() >= 8 && bits_received.get(0) == 'd' && bits_received.get(4) == 'd') {
                         data_a = (int)bits_received.get(2);
                         data_b = (int)bits_received.get(6);
+                        mHandler.handleMessage(null);
+                        bits_received.clear();
+                    } else if (bits_received.size() > 8) {
+                        bits_received.clear();
                     }
-                    // Send the obtained bytes to the UI activity
-                    //mHandler.obtainMessage(MESSAGE_READ, readBytes, -1, buffer)
-                    //.sendToTarget();
                 }
                 catch (IOException e) {
                     break;
