@@ -16,7 +16,8 @@
 #define ERROR 0
 #define TIMESTAMP 1
 #define configSize 12
-static const periodTicks = 49152000 / 106000;
+
+static const int periodTicks = 49152000 / 106000;
 
 static const GlobalPin btTx =  { GPIO_J, io_PJ, 1<<3,  Polar_ActiveHigh }; // J3
 static const GlobalPin btRx = { GPIO_J, io_PJ, 1<<2, Polar_ActiveHigh }; // J2
@@ -93,20 +94,30 @@ void transmitMode()
 //global write function. The bitShift is what decides whether the data
 //is being written to config the transceiver or send to the transponder.
 
-void globalWriteTx(int Address, int Data, int bitShift)
+void globalWriteTx(int address, int addressSize, int data, int dataSize)
 {
 	configMode();
-	Address = Address << 12;
 	
-	for (i = 3; i >= 0; i--)
+	
+	for (i = addressSize-1; i > 0; i--)
 	{
 		ckLow();
-		globalPin_write(Address << &1, &DIN);
+		globalPin_write((address >> i)&1, &DIN);
+		sys_clock_wait(periodTicks / 2);
+		ckHigh();
+		sys_clock_wait(periodTicks / 2);
+	}
+
+	for (i = datasize - 1; i > 0; i--)
+	{
+		ckLow();
+		globalPin_write((data >> i) & 1, &DIN);
 		sys_clock_wait(periodTicks / 2);
 		ckHigh();
 		sys_clock_wait(periodTicks / 2);
 	}
 }
+
 
 void transmitInit()
 {
