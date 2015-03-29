@@ -16,6 +16,12 @@
 #define ERROR 0
 #define TIMESTAMP 1
 #define configSize 12
+#define MLX_ADDRESS_SIZE 4
+#define MLX_DATA_SIZE 8
+#define NFC_ADDRESS_SIZE 16
+#define NFC_DATA_SIZE 64
+#define FIVE_DELAY 210
+#define HUNDRED_DELAY 4195
 
 static const int periodTicks = 49152000 / 106000;
 
@@ -30,15 +36,16 @@ static const GlobalPin DSYNC = { GPIO_C, io_PC5, 1<<5, Polar_ActiveHigh }; //C5
 static const GlobalPin CK = { GPIO_C, io_PC4, 1<<4, Polar_ActiveHigh }; //C4
 static const GlobalPin MODE = { GPIO_D, io_PD2, 1<<2, Polar_ActiveHigh }; //D2
 static const GlobalPin RTB = { GPIO_D, io_PD3, 1<<3, Polar_ActiveHigh }; //D3
-static const UART_Pin_Pair antPair = { { GPIO_C, io_PC7, 0x8, Polar_ActiveHigh }, { GPIO_C, io_PC6, 0x7, Polar_ActiveHigh }, 0 };
-static const UART_Pin_Pair btPair = { { GPIO_J, io_PJ, 2, Polar_ActiveHigh }, { GPIO_J, io_PJ, 3, Polar_ActiveHigh }, 0 };
+static const UART_Pin_Pair antPair = { { GPIO_C, io_PC7, 1<<7, Polar_ActiveHigh }, { GPIO_C, io_PC6, 1<<6, Polar_ActiveHigh }, 0 };
+static const UART_Pin_Pair btPair = { { GPIO_J, io_PJ, 1<<3, Polar_ActiveHigh }, { GPIO_J, io_PJ, 1<<2, Polar_ActiveHigh }, 0 };
 
 //Edit this function for reception timing
 
-bool detectDSYNC()
-{
-	
-}
+//bool detectDSYNC()
+//{
+//}
+
+//DIN high and low
 
 void dataHigh()
 {
@@ -50,6 +57,9 @@ void dataLow()
 	globalPin_write(OFF, &DIN);
 	xpd_puts("Data In Low.\n");
 }
+
+//CK high and low
+
 void ckHigh()
 {
 	globalPin_write(ON, &CK);
@@ -88,18 +98,28 @@ void transmitMode()
 {
 	globalPin_write(OFF, &RTB);
 	globalPin_write(ON, &MODE);
+	ckLow();
+	sys_clock_wait(periodTicks / 2);
+	ckHigh();
+	sys_clock_wait(periodTicks / 2);
+	ckLow();
+	sys_clock_wait(periodTicks / 2);
+	ckHigh();
+	sys_clock_wait(periodTicks / 2);
+	ckLow();
+	sys_clock_wait(periodTicks / 2);
+	ckHigh();
+	sys_clock_wait(periodTicks / 2);
 	xpd_puts("Transmission Mode Enabled.\n");
 }
+
 
 //global write function. The bitShift is what decides whether the data
 //is being written to config the transceiver or send to the transponder.
 
 void globalWriteTx(int address, int addressSize, int data, int dataSize)
-{
-	configMode();
-	
-	
-	for (i = addressSize-1; i > 0; i--)
+{	
+	for (int i = addressSize-1; i > 0; i--)
 	{
 		ckLow();
 		globalPin_write((address >> i)&1, &DIN);
@@ -108,7 +128,7 @@ void globalWriteTx(int address, int addressSize, int data, int dataSize)
 		sys_clock_wait(periodTicks / 2);
 	}
 
-	for (i = datasize - 1; i > 0; i--)
+	for (int i = dataSize - 1; i > 0; i--)
 	{
 		ckLow();
 		globalPin_write((data >> i) & 1, &DIN);
@@ -118,60 +138,44 @@ void globalWriteTx(int address, int addressSize, int data, int dataSize)
 	}
 }
 
-
-void transmitInit()
-{
-	ckLow();
-	wait;
-	ckHigh();
-	wait
-	ckLow();
-	wait;
-	ckHigh();
-	wait;
-	ckLow();
-	wait;
-	ckHigh();
-	wait;
-}
-
-
 //Delay before reading after Powering NFC tag. Should be 100 us
-
-void tDelay()
-{
-	sys_clock_wait(41952000 / 10000);
-}
 
 //this function is used to detect a tag.
 //EDIT USING THE isoWRITE();
 
-uint16_t nfcDetection(uint16_t *detectByte){
-	
-	uint16_t tagResponse = 0;
+//Set Up MLX Transceiver for 14443-B mode
 
-	transmitMode();
-	ckHigh();
-
-	uart_write_byte(*detectByte, &antPair);
-	ckLow();
-	tDelay();
-
-	receiveMode();
-	tDelay();
-
-	tagResponse = uart_read_byte(&antPair);
-
-	if (tagResponse != 0)
-	{
-		return(tagResponse);
-	}
-	else
-	{
-		xpd_puts("fuuuuuck.\n");
-		return(ERROR);
-	}
+void MLX_Config()
+{
+	configMode();
+	globalWriteTx(0, MLX_ADDRESS_SIZE, 0x73, MLX_DATA_SIZE);
+	sys_clock_wait(FIVE_DELAY);
+	globalWriteTx(1, MLX_ADDRESS_SIZE, 0x01, MLX_DATA_SIZE);
+	sys_clock_wait(FIVE_DELAY);
+	globalWriteTx(2, MLX_ADDRESS_SIZE, 0x00, MLX_DATA_SIZE);
+	sys_clock_wait(FIVE_DELAY);
+	globalWriteTx(3, MLX_ADDRESS_SIZE, 0x0F, MLX_DATA_SIZE);
+	sys_clock_wait(FIVE_DELAY);
+	globalWriteTx(4, MLX_ADDRESS_SIZE, 0x00, MLX_DATA_SIZE);
+	sys_clock_wait(FIVE_DELAY);
+	globalWriteTx(5, MLX_ADDRESS_SIZE, 0xFF, MLX_DATA_SIZE);
+	sys_clock_wait(FIVE_DELAY);
+	globalWriteTx(6, MLX_ADDRESS_SIZE, 0x00, MLX_DATA_SIZE);
+	sys_clock_wait(FIVE_DELAY);
+	globalWriteTx(7, MLX_ADDRESS_SIZE, 0x00, MLX_DATA_SIZE);
+	sys_clock_wait(FIVE_DELAY);
+	globalWriteTx(8, MLX_ADDRESS_SIZE, 0x00, MLX_DATA_SIZE);
+	sys_clock_wait(FIVE_DELAY);
+	globalWriteTx(9, MLX_ADDRESS_SIZE, 0x00, MLX_DATA_SIZE);
+	sys_clock_wait(FIVE_DELAY);
+	globalWriteTx(10, MLX_ADDRESS_SIZE, 0x03, MLX_DATA_SIZE);
+	sys_clock_wait(FIVE_DELAY);
+	globalWriteTx(11, MLX_ADDRESS_SIZE, 0x3F, MLX_DATA_SIZE);
+	sys_clock_wait(FIVE_DELAY);
+	globalWriteTx(12, MLX_ADDRESS_SIZE, 0x00, MLX_DATA_SIZE);
+	sys_clock_wait(FIVE_DELAY);
 }
+
 
 void init()
 {
@@ -192,42 +196,47 @@ void init()
 	globalPin_set_dir(PinDir_Output, &RTB);
 	globalPin_set_dir(PinDir_Input, &DSYNC);
 	globalPin_set_dir(PinDir_Input, &CK);
+	
+	MLX_Config();
 
 	dataLow(); //Default - Forget if it is low or high, but based on logic, to send data DIN
 			   // Must not be set high.
-	transmitMode();
 
 }
-
-int test = 0;
 
 int main(void)
 {
 	//Data Transfer initializations
-
-	uint16_t bluetoothCommand = 0;
-	uint16_t tagResponse = 0;
-
 	init();
 
+	int testDetectData = 0xFFFF;
+	int testDetectAddress = 0x06;
+
 	while (1){
-		
+
+		transmitMode();
+		globalWriteTx(testDetectAddress, 8, testDetectData, 16);
+		globalWriteTx(testDetectAddress, 0, testDetectData, 16);
+		sys_clock_wait(HUNDRED_DELAY);
+		receiveMode();
+
+		/*
 		bluetoothCommand = uart_read_byte(&btPair);
 
-		if (bluetoothCommand == 'a'){
+		if (bluetoothCommand == "a"){
 
 			tagResponse = nfcDetection(&bluetoothCommand);
 
 			if (tagResponse != ERROR){
 
-				uart_write_byte('R', &btPair);
+				uart_write_byte("R", &btPair);
 			}else{
 				xpd_puts("son of a.\n");
 			}
 
 		}else{
 			xpd_puts("fuuuu still.\n");
-		}
+		}*/
 		//if (bluetoothCommand == 'b'){
 		//	tagResponse = nfcDetection(&bluetoothCommand);
 		//	if (tagResponse != ERROR){
