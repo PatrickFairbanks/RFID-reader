@@ -20,4 +20,4 @@ typedef struct MLX_Pin_Set
 	GlobalPin const RTB;	
 	
 	static const int periodTicks;
-}
+} MLX_Pin_Set;

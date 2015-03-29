@@ -215,8 +215,11 @@ int main(void)
 	while (1){
 
 		transmitMode();
+		sys_clock_wait(HUNDRED_DELAY*1000);
+		xpd_puts("Transmitting now.");
 		globalWriteTx(testDetectAddress, 8, testDetectData, 16);
 		globalWriteTx(testDetectAddress, 0, testDetectData, 16);
+		xpd_puts("Done transmitting.");
 		sys_clock_wait(HUNDRED_DELAY);
 		receiveMode();
 
