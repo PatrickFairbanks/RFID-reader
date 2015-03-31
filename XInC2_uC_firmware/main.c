@@ -16,16 +16,6 @@
 #include "uart_bluetooth.h"
 #include "MLX.h"
 
-static const MLX_Pin_Set tagA = 
-{
-	TAGA_DIN,
-	TAGA_DOUT,
-	TAGA_DSYNC,
-	TAGA_CK,
-	TAGA_MODE,
-	TAGA_RTB,
-};
-
 void init()
 {
 	init_clock();
