@@ -12,6 +12,7 @@
 #include "time_funcs.h"
 #include "struct_aliases.h"
 #include "UART.h"
+#include "MLX.h"
 
 #define ERROR 0
 #define TIMESTAMP 1
