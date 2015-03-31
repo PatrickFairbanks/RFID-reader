@@ -14,6 +14,17 @@
 #include "string_defines.h"
 #include "InputStream.h"
 #include "uart_bluetooth.h"
+#include "MLX.h"
+
+static const MLX_Pin_Set tagA = 
+{
+	TAGA_DIN,
+	TAGA_DOUT,
+	TAGA_DSYNC,
+	TAGA_CK,
+	TAGA_MODE,
+	TAGA_RTB,
+};
 
 void init()
 {
@@ -27,20 +38,11 @@ int main(void)
 {
 	init();
 	
-	int periodTicks = 49152000 / 106000;
-	GlobalPin CK = { GPIO_C, io_PC4, 1<<4, Polar_ActiveHigh };
-	
-	globalPin_write(ON, &CK);
-	
-		while(1)
-		{
-			xpd_puts("Writing 0\n");
-			globalPin_write(0, &CK);
-			wait_ms(1000);
-			xpd_puts("Writing 1\n");
-			globalPin_write(1, &CK);
-			wait_ms(1000);
-		}
+	MLX_Initialize(&tagA);
+	while(1)
+	{
+		MLX_Transmit_Mode(&tagA);
+	}
 	
 	// New Loop to actually parse the data from the app
 	while(1)

@@ -34,8 +34,8 @@ static const GlobalPin DIN = { GPIO_C, io_PC7, 1<<7, Polar_ActiveHigh }; //C7
 static const GlobalPin DOUT = { GPIO_C, io_PC6, 1<<6, Polar_ActiveHigh }; //C6
 static const GlobalPin DSYNC = { GPIO_C, io_PC5, 1<<5, Polar_ActiveHigh }; //C5
 static const GlobalPin CK = { GPIO_C, io_PC4, 1<<4, Polar_ActiveHigh }; //C4
-static const GlobalPin MODE = { GPIO_D, io_PD2, 1<<2, Polar_ActiveHigh }; //D2
-static const GlobalPin RTB = { GPIO_D, io_PD3, 1<<3, Polar_ActiveHigh }; //D3
+static const GlobalPin MODE = { GPIO_D, io_PD3, 1<<3, Polar_ActiveHigh }; //D3
+static const GlobalPin RTB = { GPIO_D, io_PD2, 1<<2, Polar_ActiveHigh }; //D2
 static const UART_Pin_Pair antPair = { { GPIO_C, io_PC7, 1<<7, Polar_ActiveHigh }, { GPIO_C, io_PC6, 1<<6, Polar_ActiveHigh }, 0 };
 static const UART_Pin_Pair btPair = { { GPIO_J, io_PJ, 1<<3, Polar_ActiveHigh }, { GPIO_J, io_PJ, 1<<2, Polar_ActiveHigh }, 0 };
 
