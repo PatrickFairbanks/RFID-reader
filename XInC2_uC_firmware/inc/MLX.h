@@ -11,30 +11,30 @@
 #include "time_funcs.h"
 
 #define MLX_ADDRESS_SIZE 				4
-#define MLX_DATA_SIZE 						8
-#define NFC_ADDRESS_SIZE					8
-#define NFC_QUARTER_DATA_SIZE		16
+#define MLX_DATA_SIZE 					8
+#define NFC_ADDRESS_SIZE				8
+#define NFC_QUARTER_DATA_SIZE			16
 
-#define CONFIG_PERIOD						65535 //58
+#define CONFIG_PERIOD					65535 //58
 #define TRANSMIT_PERIOD					58
-#define RECEIVE_PERIOD						58
+#define RECEIVE_PERIOD					58
 
-#define FIVE_US										246
+#define FIVE_US							246
 #define ONE_HUNDRED_US					4195
 
 #define TAGA_DIN  		{ GPIO_C, io_PC7, 1<<7, Polar_ActiveHigh } //C7
-#define TAGA_DOUT  	{ GPIO_C, io_PC6, 1<<6, Polar_ActiveHigh } //C6
-#define TAGA_DSYNC { GPIO_C, io_PC5, 1<<5, Polar_ActiveHigh } //C5
+#define TAGA_DOUT  		{ GPIO_C, io_PC6, 1<<6, Polar_ActiveHigh } //C6
+#define TAGA_DSYNC 		{ GPIO_C, io_PC5, 1<<5, Polar_ActiveHigh } //C5
 #define TAGA_CK  		{ GPIO_C, io_PC4, 1<<4, Polar_ActiveHigh } //C4
-#define TAGA_MODE  	{ GPIO_D, io_PD3, 1<<3, Polar_ActiveHigh } //D3
-#define TAGA_RTB  	{ GPIO_D, io_PD3, 1<<2, Polar_ActiveHigh } //D2
+#define TAGA_MODE  		{ GPIO_D, io_PD3, 1<<3, Polar_ActiveHigh } //D3
+#define TAGA_RTB  		{ GPIO_D, io_PD3, 1<<2, Polar_ActiveHigh } //D2
 
 #define TAGB_DIN  		{ GPIO_E, io_PE, 1<<7, Polar_ActiveHigh } //E7
-#define TAGB_DOUT  	{ GPIO_E, io_PE, 1<<4, Polar_ActiveHigh } //E4
-#define TAGB_DSYNC { GPIO_E, io_PE, 1<<3, Polar_ActiveHigh } //E3
+#define TAGB_DOUT  		{ GPIO_E, io_PE, 1<<4, Polar_ActiveHigh } //E4
+#define TAGB_DSYNC 		{ GPIO_E, io_PE, 1<<3, Polar_ActiveHigh } //E3
 #define TAGB_CK  		{ GPIO_E, io_PE, 1<<2, Polar_ActiveHigh } //E2
-#define TAGB_MODE  	{ GPIO_E, io_PE, 1<<1, Polar_ActiveHigh } //E1
-#define TAGB_RTB  	{ GPIO_E, io_PE, 1<<6, Polar_ActiveHigh } //E6
+#define TAGB_MODE  		{ GPIO_E, io_PE, 1<<1, Polar_ActiveHigh } //E1
+#define TAGB_RTB  		{ GPIO_E, io_PE, 1<<6, Polar_ActiveHigh } //E6
 
 int Config_Data[] = { 0x73, 0x01, 0x00, 0x0F, 0x00, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x03, 0x3F, 0x00 };
 
