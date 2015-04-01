@@ -19,6 +19,8 @@
 #define TRANSMIT_PERIOD					58
 #define RECEIVE_PERIOD					58
 
+#define START_UP_TIME					2
+
 #define FIVE_US							246
 #define ONE_HUNDRED_US					4195
 
@@ -88,6 +90,43 @@ void MLX_Clk_Low(MLX_Pin_Set const *pinSet)
 	globalPin_write(OFF, &pinSet->CK);
 }
 
+void MLX_Power_Up(MLX_Pin_Set const *pinSet)
+{
+	MLX_Data_High(pinSet);
+	globalPin_write(OFF, &pinSet->MODE);
+
+	for (int i = 0; i < 2; i++)
+	{
+		MLX_Clk_Low(pinSet);
+		sys_clock_wait(FIVE_US);
+		MLX_Clk_High(pinSet);
+		sys_clock_wait(FIVE_US);
+	}
+	
+	globalPin_write(ON, &pinSet->MODE);
+
+	wait_ms(START_UP_TIME);
+	MLX_Clk_High(pinSet);
+	MLX_Data_Low(pinSet);
+	sys_clock_wait(FIVE_US);
+	MLX_Clk_Low(pinSet);
+	sys_clock_wait(FIVE_US);
+	MLX_Data_High(pinSet);
+	sys_clock_wait(FIVE_US);
+
+	globalPin_write(OFF, &pinSet->MODE);
+
+	for (int i = 0; i < 3; i++)
+	{
+		MLX_Clk_Low(pinSet);
+		sys_clock_wait(FIVE_US);
+		MLX_Clk_High(pinSet);
+		sys_clock_wait(FIVE_US);
+	}
+
+	
+}
+
 void MLX_Config_Mode(MLX_Pin_Set const *pinSet)
 {
 	globalPin_write(OFF, &pinSet->RTB);
@@ -144,9 +183,10 @@ void MLX_Global_Write(int data, int size, int periodTicks, MLX_Pin_Set const *pi
 
 	globalPin_write(ON, &pinSet->DIN);
 }
+
 void MLX_Global_Receive(MLX_Pin_Set const *pinSet)
 {
-
+	MLX_Receive_Mode(pinSet);
 }
 
 void MLX_Config(MLX_Pin_Set const *pinSet)
@@ -183,7 +223,9 @@ void MLX_Initialize(MLX_Pin_Set const *pinSet)
 	
 	MLX_Config(pinSet);
 
-	MLX_Data_Low(pinSet);	
+	MLX_Data_High(pinSet);	
+
+	MLX_Power_Up(pinSet);
 }
 
 /*
