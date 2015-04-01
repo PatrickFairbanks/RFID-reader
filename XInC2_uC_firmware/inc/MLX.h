@@ -97,6 +97,7 @@ void MLX_Config_Mode(MLX_Pin_Set const *pinSet)
 
 void MLX_Receive_Mode(MLX_Pin_Set const *pinSet)
 {
+	sys_clock_wait(ONE_HUNDRED_US);
 	globalPin_write(ON, &pinSet->RTB);
 	globalPin_write(ON, &pinSet->MODE);
 	globalPin_write(ON, &pinSet->DIN);
@@ -108,6 +109,7 @@ void MLX_Transmit_Mode(MLX_Pin_Set const *pinSet)
 {
 	globalPin_write(OFF, &pinSet->RTB);
 	globalPin_write(ON, &pinSet->MODE);
+	globalPin_write(ON, &pinSet->DIN);                       //This needs to be on, not sure if it pulses with the clock.
 	xpd_puts(" this is working ");
 	for(int i = 0; i < 3; i++)
 	{
@@ -129,6 +131,8 @@ void MLX_Transmit_Mode(MLX_Pin_Set const *pinSet)
 
 void MLX_Global_Write(int data, int size, int periodTicks, MLX_Pin_Set const *pinSet)
 {
+	globalPin_write(OFF, &pinSet->DIN);
+
 	for( int i = size - 1; i > 0; i-- )
 	{
 		MLX_Clk_Low(pinSet);
@@ -137,6 +141,12 @@ void MLX_Global_Write(int data, int size, int periodTicks, MLX_Pin_Set const *pi
 		MLX_Clk_High(pinSet);
 		sys_clock_wait( periodTicks / 2);
 	}
+
+	globalPin_write(ON, &pinSet->DIN);
+}
+void MLX_Global_Receive(MLX_Pin_Set const *pinSet)
+{
+
 }
 
 void MLX_Config(MLX_Pin_Set const *pinSet)
