@@ -11,30 +11,34 @@
 #include "time_funcs.h"
 
 #define MLX_ADDRESS_SIZE 				4
-#define MLX_DATA_SIZE 						8
-#define NFC_ADDRESS_SIZE					8
-#define NFC_QUARTER_DATA_SIZE		16
+#define MLX_DATA_SIZE 					8
+#define NFC_ADDRESS_SIZE				8
+#define NFC_QUARTER_DATA_SIZE			16
 
-#define CONFIG_PERIOD						65535 //58
+#define CONFIG_PERIOD					65535 //58
 #define TRANSMIT_PERIOD					58
-#define RECEIVE_PERIOD						58
+#define RECEIVE_PERIOD					465
 
-#define FIVE_US										246
+#define MV_TIME							1856
+
+#define START_UP_TIME					2
+
+#define FIVE_US							246
 #define ONE_HUNDRED_US					4195
 
 #define TAGA_DIN  		{ GPIO_C, io_PC7, 1<<7, Polar_ActiveHigh } //C7
-#define TAGA_DOUT  	{ GPIO_C, io_PC6, 1<<6, Polar_ActiveHigh } //C6
-#define TAGA_DSYNC { GPIO_C, io_PC5, 1<<5, Polar_ActiveHigh } //C5
+#define TAGA_DOUT  		{ GPIO_C, io_PC6, 1<<6, Polar_ActiveHigh } //C6
+#define TAGA_DSYNC 		{ GPIO_C, io_PC5, 1<<5, Polar_ActiveHigh } //C5
 #define TAGA_CK  		{ GPIO_C, io_PC4, 1<<4, Polar_ActiveHigh } //C4
-#define TAGA_MODE  	{ GPIO_D, io_PD3, 1<<3, Polar_ActiveHigh } //D3
-#define TAGA_RTB  	{ GPIO_D, io_PD3, 1<<2, Polar_ActiveHigh } //D2
+#define TAGA_MODE  		{ GPIO_D, io_PD3, 1<<3, Polar_ActiveHigh } //D3
+#define TAGA_RTB  		{ GPIO_D, io_PD3, 1<<2, Polar_ActiveHigh } //D2
 
 #define TAGB_DIN  		{ GPIO_E, io_PE, 1<<7, Polar_ActiveHigh } //E7
-#define TAGB_DOUT  	{ GPIO_E, io_PE, 1<<4, Polar_ActiveHigh } //E4
-#define TAGB_DSYNC { GPIO_E, io_PE, 1<<3, Polar_ActiveHigh } //E3
+#define TAGB_DOUT  		{ GPIO_E, io_PE, 1<<4, Polar_ActiveHigh } //E4
+#define TAGB_DSYNC 		{ GPIO_E, io_PE, 1<<3, Polar_ActiveHigh } //E3
 #define TAGB_CK  		{ GPIO_E, io_PE, 1<<2, Polar_ActiveHigh } //E2
-#define TAGB_MODE  	{ GPIO_E, io_PE, 1<<1, Polar_ActiveHigh } //E1
-#define TAGB_RTB  	{ GPIO_E, io_PE, 1<<6, Polar_ActiveHigh } //E6
+#define TAGB_MODE  		{ GPIO_E, io_PE, 1<<1, Polar_ActiveHigh } //E1
+#define TAGB_RTB  		{ GPIO_E, io_PE, 1<<6, Polar_ActiveHigh } //E6
 
 int Config_Data[] = { 0x73, 0x01, 0x00, 0x0F, 0x00, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x03, 0x3F, 0x00 };
 
@@ -88,6 +92,43 @@ void MLX_Clk_Low(MLX_Pin_Set const *pinSet)
 	globalPin_write(OFF, &pinSet->CK);
 }
 
+void MLX_Power_Up(MLX_Pin_Set const *pinSet)
+{
+	MLX_Data_High(pinSet);
+	globalPin_write(OFF, &pinSet->MODE);
+
+	for (int i = 0; i < 2; i++)
+	{
+		MLX_Clk_Low(pinSet);
+		sys_clock_wait(FIVE_US);
+		MLX_Clk_High(pinSet);
+		sys_clock_wait(FIVE_US);
+	}
+	
+	globalPin_write(ON, &pinSet->MODE);
+
+	wait_ms(START_UP_TIME);
+	MLX_Clk_High(pinSet);
+	MLX_Data_Low(pinSet);
+	sys_clock_wait(FIVE_US);
+	MLX_Clk_Low(pinSet);
+	sys_clock_wait(FIVE_US);
+	MLX_Data_High(pinSet);
+	sys_clock_wait(FIVE_US);
+
+	globalPin_write(OFF, &pinSet->MODE);
+
+	for (int i = 0; i < 3; i++)
+	{
+		MLX_Clk_Low(pinSet);
+		sys_clock_wait(FIVE_US);
+		MLX_Clk_High(pinSet);
+		sys_clock_wait(FIVE_US);
+	}
+
+	
+}
+
 void MLX_Config_Mode(MLX_Pin_Set const *pinSet)
 {
 	globalPin_write(OFF, &pinSet->RTB);
@@ -97,6 +138,7 @@ void MLX_Config_Mode(MLX_Pin_Set const *pinSet)
 
 void MLX_Receive_Mode(MLX_Pin_Set const *pinSet)
 {
+	sys_clock_wait(ONE_HUNDRED_US);
 	globalPin_write(ON, &pinSet->RTB);
 	globalPin_write(ON, &pinSet->MODE);
 	globalPin_write(ON, &pinSet->DIN);
@@ -108,6 +150,7 @@ void MLX_Transmit_Mode(MLX_Pin_Set const *pinSet)
 {
 	globalPin_write(OFF, &pinSet->RTB);
 	globalPin_write(ON, &pinSet->MODE);
+	globalPin_write(ON, &pinSet->DIN);                       //This needs to be on, not sure if it pulses with the clock.
 	xpd_puts(" this is working ");
 	for(int i = 0; i < 3; i++)
 	{
@@ -129,6 +172,8 @@ void MLX_Transmit_Mode(MLX_Pin_Set const *pinSet)
 
 void MLX_Global_Write(int data, int size, int periodTicks, MLX_Pin_Set const *pinSet)
 {
+	globalPin_write(OFF, &pinSet->DIN);
+
 	for( int i = size - 1; i > 0; i-- )
 	{
 		MLX_Clk_Low(pinSet);
@@ -137,6 +182,36 @@ void MLX_Global_Write(int data, int size, int periodTicks, MLX_Pin_Set const *pi
 		MLX_Clk_High(pinSet);
 		sys_clock_wait( periodTicks / 2);
 	}
+
+	globalPin_write(ON, &pinSet->DIN);
+
+}
+
+int MLX_Global_Receive(MLX_Pin_Set const *pinSet)
+{
+	int dataPack = 0;
+	MLX_Clk_High(pinSet);
+
+	for (int i = 0; i < 16; i++)
+	{
+		int prevDSYNC = 0;
+		while (1)
+		{
+			int currentDSYNC = globalPin_read(&pinSet->DSYNC);
+			if (prevDSYNC && !currentDSYNC)
+			{
+
+				break;
+			}
+
+			prevDSYNC = currentDSYNC;
+		}
+
+		dataPack = (dataPack | globalPin_read(&pinSet->DOUT)) << 1;
+
+	}
+	MLX_Clk_Low(pinSet);
+	return(dataPack);
 }
 
 void MLX_Config(MLX_Pin_Set const *pinSet)
@@ -173,7 +248,9 @@ void MLX_Initialize(MLX_Pin_Set const *pinSet)
 	
 	MLX_Config(pinSet);
 
-	MLX_Data_Low(pinSet);	
+	MLX_Data_High(pinSet);	
+
+	MLX_Power_Up(pinSet);
 }
 
 /*

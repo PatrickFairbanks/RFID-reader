@@ -17,7 +17,9 @@
 
 #define CONFIG_PERIOD					65535 //58
 #define TRANSMIT_PERIOD					58
-#define RECEIVE_PERIOD					58
+#define RECEIVE_PERIOD					465
+
+#define MV_TIME							1856
 
 #define START_UP_TIME					2
 
@@ -182,11 +184,34 @@ void MLX_Global_Write(int data, int size, int periodTicks, MLX_Pin_Set const *pi
 	}
 
 	globalPin_write(ON, &pinSet->DIN);
+
 }
 
-void MLX_Global_Receive(MLX_Pin_Set const *pinSet)
+int MLX_Global_Receive(MLX_Pin_Set const *pinSet)
 {
-	MLX_Receive_Mode(pinSet);
+	int dataPack = 0;
+	MLX_Clk_High(pinSet);
+
+	for (int i = 0; i < 16; i++)
+	{
+		int prevDSYNC = 0;
+		while (1)
+		{
+			int currentDSYNC = globalPin_read(&pinSet->DSYNC);
+			if (prevDSYNC && !currentDSYNC)
+			{
+
+				break;
+			}
+
+			prevDSYNC = currentDSYNC;
+		}
+
+		dataPack = (dataPack | globalPin_read(&pinSet->DOUT)) << 1;
+
+	}
+	MLX_Clk_Low(pinSet);
+	return(dataPack);
 }
 
 void MLX_Config(MLX_Pin_Set const *pinSet)
