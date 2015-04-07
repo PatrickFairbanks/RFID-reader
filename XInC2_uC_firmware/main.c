@@ -61,18 +61,21 @@ int main(void)
 			if( IS_ContainsString(DELETE_A, &btStream) )
 			{
 				xpd_puts("Deleting A\n");
+				// DELETING B
 				MLX_Tag_Write(&tagA,0);
 				xpd_puts("A Has Been Deleted.");
 			}
 			else if( IS_ContainsString(DELETE_B, &btStream) )
 			{
 				xpd_puts("Deleting B\n");
+				// DELETING A
 				MLX_Tag_Write(&tagB,0);
 				xpd_puts("B Has Been Deleted.");
 			}
 			else if( IS_ContainsString(CONSOL_A, &btStream) )
 			{
-				xpd_puts("Consolidating A\n");
+				xpd_puts("Consolidating A\n");\
+				// CONSOLDATE TO A ACTION
 				int b = MLX_Tag_Read(&tagB);
 				int o = MLX_Tag_Read(&tagA) + b;
 				MLX_Tag_Write(&tagA, o);
@@ -82,6 +85,7 @@ int main(void)
 			else if( IS_ContainsString(CONSOL_B, &btStream) )
 			{
 				xpd_puts("Consolidating B\n");
+				// CONSOLIDATE TO B ACTION
 				int b = MLX_Tag_Read(&tagB);
 				int o = MLX_Tag_Read(&tagA) + b;
 				MLX_Tag_Write(&tagA, 0);
@@ -91,6 +95,7 @@ int main(void)
 			else if( IS_ContainsString(SWAP, &btStream) )
 			{
 				xpd_puts("Swapping\n");
+				// SWAP ACTION
 				int a = MLX_Tag_Read(&tagA);
 				int b = MLX_Tag_Read(&tagB);
 				MLX_Tag_Write(&tagA, b);
