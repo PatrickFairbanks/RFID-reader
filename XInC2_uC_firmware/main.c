@@ -32,6 +32,9 @@ int main(void)
 	while(1)
 	{
 		MLX_Transmit_Mode(&tagA);
+		MLX_Global_Write(0, 0, TRANSMIT_PERIOD, &tagA);
+	//	MLX_Receive_Mode(&tagA);
+	//	MLX_Global_Receive(&tagA);
 	}
 	
 	// New Loop to actually parse the data from the app
@@ -58,39 +61,54 @@ int main(void)
 			if( IS_ContainsString(DELETE_A, &btStream) )
 			{
 				xpd_puts("Deleting A\n");
-				// DELETE A ACTION
+				MLX_Tag_Write(&tagA,0);
 				xpd_puts("A Has Been Deleted.");
 			}
 			else if( IS_ContainsString(DELETE_B, &btStream) )
 			{
 				xpd_puts("Deleting B\n");
-				// DELETE B ACTION
+				MLX_Tag_Write(&tagB,0);
 				xpd_puts("B Has Been Deleted.");
 			}
 			else if( IS_ContainsString(CONSOL_A, &btStream) )
 			{
 				xpd_puts("Consolidating A\n");
-				// CONSOLIDATE A ACTION
+				int b = MLX_Tag_Read(&tagB);
+				int o = MLX_Tag_Read(&tagA) + b;
+				MLX_Tag_Write(&tagA, o);
+				MLX_Tag_Write(&tagB, 0);
 				xpd_puts("Consolidated to A.\n");
 			}
 			else if( IS_ContainsString(CONSOL_B, &btStream) )
 			{
 				xpd_puts("Consolidating B\n");
-				// CONSOLIDATE B ACTION
+				int b = MLX_Tag_Read(&tagB);
+				int o = MLX_Tag_Read(&tagA) + b;
+				MLX_Tag_Write(&tagA, 0);
+				MLX_Tag_Write(&tagB, o);
 				xpd_puts("Consolidated to B.\n");
 			}
 			else if( IS_ContainsString(SWAP, &btStream) )
 			{
 				xpd_puts("Swapping\n");
-				// SWAP ACTION
+				int a = MLX_Tag_Read(&tagA);
+				int b = MLX_Tag_Read(&tagB);
+				MLX_Tag_Write(&tagA, b);
+				MLX_Tag_Write(&tagB, a);
 				xpd_puts("Swap complete.\n");
 			}
 			else if( IS_ContainsString(REFRESH, &btStream) )
 			{
 				xpd_puts("Refreshing\n");
 				// REFRESH ACTION
-						uart_write_str("da2\n", 4, &btPair);
-						uart_write_str("db2\n", 4, &btPair);
+				int a = MLX_Tag_Read(&tagA);
+				int b = MLX_Tag_Read(&tagB);
+				char stra[4] = "da2\n";
+				char strb[4] = "db2\n";
+				stra[3] = a;
+				strb[3] = b;
+				uart_write_str(stra, 4, &btPair);
+				uart_write_str(strb, 4, &btPair);
 				xpd_puts("Refresh complete.\n");
 			}
 			

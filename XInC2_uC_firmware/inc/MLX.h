@@ -125,7 +125,8 @@ void MLX_Power_Up(MLX_Pin_Set const *pinSet)
 		MLX_Clk_High(pinSet);
 		sys_clock_wait(FIVE_US);
 	}
-
+	
+xpd_puts("Power-up method complete.\n");
 	
 }
 
@@ -151,23 +152,23 @@ void MLX_Transmit_Mode(MLX_Pin_Set const *pinSet)
 	globalPin_write(OFF, &pinSet->RTB);
 	globalPin_write(ON, &pinSet->MODE);
 	globalPin_write(ON, &pinSet->DIN);                       //This needs to be on, not sure if it pulses with the clock.
-	xpd_puts(" this is working ");
+	//xpd_puts(" this is working ");
 	for(int i = 0; i < 3; i++)
 	{
-		xpd_puts("Clk Low\n");
+	//	xpd_puts("Clk Low\n");
 		MLX_Clk_Low(pinSet);
 		for( int i = 0; i < 19200; i++ )
 		{
 			sys_clock_wait( TRANSMIT_PERIOD / 2 );
 		}
-		xpd_puts("Clk High\n");
+	//	xpd_puts("Clk High\n");
 		MLX_Clk_High(pinSet);
 		for( int i = 0; i < 19200; i++ )
 		{
 			sys_clock_wait( TRANSMIT_PERIOD / 2 );
 		}
 	}
-	xpd_puts("Transmission Mode Enabled.\n");
+	//xpd_puts("Transmission Mode Enabled.\n");
 }
 
 void MLX_Global_Write(int data, int size, int periodTicks, MLX_Pin_Set const *pinSet)
@@ -197,7 +198,13 @@ int MLX_Global_Receive(MLX_Pin_Set const *pinSet)
 		int prevDSYNC = 0;
 		while (1)
 		{
+			xpd_puts("DSYNC IS ");
 			int currentDSYNC = globalPin_read(&pinSet->DSYNC);
+			if(currentDSYNC > 0)
+				xpd_puts("1");
+			else
+				xpd_puts("0");
+			xpd_puts("\n");
 			if (prevDSYNC && !currentDSYNC)
 			{
 
@@ -211,6 +218,9 @@ int MLX_Global_Receive(MLX_Pin_Set const *pinSet)
 
 	}
 	MLX_Clk_Low(pinSet);
+	xpd_puts("Data read: ");
+	xpd_putc(dataPack);
+	xpd_puts("\n");
 	return(dataPack);
 }
 
@@ -253,6 +263,19 @@ void MLX_Initialize(MLX_Pin_Set const *pinSet)
 	MLX_Power_Up(pinSet);
 }
 
+int MLX_Tag_Read(MLX_Pin_Set const *pinSet)
+{
+	return MLX_Global_Receive(pinSet);
+}
+
+void MLX_Tag_Write(MLX_Pin_Set const *pinSet, int data)
+{
+	MLX_Global_Write(0xd0, 16, TRANSMIT_PERIOD, pinSet);
+	MLX_Global_Write(0   , 16, TRANSMIT_PERIOD, pinSet);
+	MLX_Global_Write(0   , 16, TRANSMIT_PERIOD, pinSet);
+	MLX_Global_Write(0   , 16, TRANSMIT_PERIOD, pinSet);
+	MLX_Global_Write(data, 8 , TRANSMIT_PERIOD, pinSet);
+}
 /*
 
 // Code to test that all the pins are working 8/8 m8
